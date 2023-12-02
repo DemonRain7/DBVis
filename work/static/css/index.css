@@ -1,0 +1,141 @@
+body {
+    background-image: url('../../images/back2.jpg');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+
+#b1 {
+    width: 20rem;
+    height: 30rem;
+    background-color: aqua;
+    position: relative;
+}
+
+#b2 {
+    width: 30rem;
+    height: 30rem;
+    background-color: pink;
+    position: relative;
+}
+
+#text {
+    height: 200px;
+    overflow: auto;
+    border: 1px solid #ccc;
+    padding: 10px;
+    position: relative;
+}
+
+#wordclouds {
+    width: 600px;
+    height: 200px;
+    text-align: center;
+    background-color: rgb(84, 147, 116);
+    position: relative;
+}
+
+
+#music-container {
+    position: absolute;
+    left:30px;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+#music-icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("../../images/music.jpg");
+    background-size: cover;
+}
+
+#music-icon.playing {
+    animation: rotate 8s infinite linear;
+}
+
+#music-icon:after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 0;
+    height: 0;
+    border: 1px solid white;
+    opacity: 0;
+    border-radius: 50%;
+}
+
+#music-icon.playing:after {
+    animation: ripple 1s infinite;
+}
+
+.comment-container {
+    width: 500px;
+    overflow-y: auto;
+    background-color: aqua;
+    overflow-x: hidden;
+}
+
+.comment_box {
+    margin: 10px 0;
+    padding: 5px;
+    background-color: #eee;
+    transition: background-color 0.3s ease-in-out;
+    /* 添加过渡效果 */
+}
+
+.comment_box:hover {
+    background-color: #ccc;
+    /* 鼠标悬浮时更改背景颜色 */
+}
+
+.comment_box:hover .comment-inner {
+    transform: scale(1.1);
+    /* 鼠标悬浮时缩放比例为1.1 */
+}
+
+.comment-inner {
+    transform: scale(1);
+    /* 初始缩放比例为1 /
+    transition: transform 0.3s ease-in-out; / 添加过渡效果 */
+}
+
+
+.commentvis_box {
+    width: 400px;
+    height: 400px;
+    background-color: aqua;
+    position: relative;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes ripple {
+    from {
+        width: 0;
+        height: 0;
+        opacity: 0.5;
+    }
+
+    to {
+        width: 50px;
+        height: 50px;
+        opacity: 0;
+    }
+}

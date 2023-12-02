@@ -1,0 +1,21 @@
+
+#FlagChangeButton {
+    background-color: #d3ab81; /* 设置背景颜色 */
+    border: none; /* 去掉边框 */
+    color: white; /* 设置文本颜色 */
+    padding: 10px 20px; /* 设置内边距 */
+    text-align: center; /* 居中文本 */
+    text-decoration: none; /* 去掉下划线 */
+    display: inline-block; /* 设置为行内块元素 */
+    font-size: 16px; /* 设置字体大小 */
+    border-radius: 5px; /* 设置圆角 */
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.3); /* 添加阴影效果 */
+    cursor: pointer; /* 添加指针效果 */
+    transition: background-color 0.3s ease; /* 添加渐变效果 */
+  }
+  
+  #FlagChangeButton:hover {
+    background-color:#929e8b ; /* 鼠标悬停时改变背景颜色 */
+  }
+
+ 
