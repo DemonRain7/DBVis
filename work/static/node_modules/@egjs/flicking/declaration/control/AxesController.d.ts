@@ -1,0 +1,44 @@
+import Axes, { PanInput, OnRelease } from "@egjs/axes";
+import Flicking from "../Flicking";
+import { ControlParams } from "../type/external";
+import StateMachine from "./StateMachine";
+declare class AxesController {
+    private _flicking;
+    private _axes;
+    private _panInput;
+    private _stateMachine;
+    private _animatingContext;
+    private _dragged;
+    get axes(): Axes;
+    get panInput(): PanInput;
+    get stateMachine(): StateMachine;
+    get state(): import("./states/State").default;
+    get animatingContext(): {
+        start: number;
+        end: number;
+        offset: number;
+    };
+    get controlParams(): ControlParams;
+    get enabled(): boolean;
+    get position(): number;
+    get range(): number[];
+    get bounce(): number[];
+    constructor();
+    init(flicking: Flicking): this;
+    destroy(): void;
+    enable(): this;
+    disable(): this;
+    release(): this;
+    updateAnimation(position: number, duration?: number): this;
+    stopAnimation(): this;
+    update(controlParams: ControlParams): this;
+    addPreventClickHandler(): this;
+    removePreventClickHandler(): this;
+    animateTo(position: number, duration: number, axesEvent?: OnRelease): Promise<void>;
+    updateDirection(): void;
+    private _resetInternalValues;
+    private _onAxesHold;
+    private _onAxesChange;
+    private _preventClickWhenDragged;
+}
+export default AxesController;

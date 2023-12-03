@@ -58,7 +58,7 @@
   background-color: #fff;
 }
 .loopple-btn.loopple-btn-white:focus, .loopple-btn.loopple-btn-white.focus {
-  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08), 0 0 0 0 rgba(255, 255, 255, 0.5) l;
+  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08), 0 0 0 0 rgba(255, 255, 255, 0.5);
 }
 .loopple-btn.loopple-btn-white:not(:disabled):not(.disabled):active, .loopple-btn.loopple-btn-white:not(:disabled):not(.disabled).active {
   color: #212529;

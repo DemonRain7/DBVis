@@ -1,0 +1,45 @@
+import Flicking, { FlickingOptions } from "./Flicking";
+import { ALIGN, DIRECTION } from "./const/external";
+import { LiteralUnion, Merged, ValueOf } from "./type/internal";
+import { ElementLike } from "./type/external";
+export declare const merge: <From extends object, To extends object>(target: From, ...sources: To[]) => Merged<From, To>;
+export declare const getElement: (el: HTMLElement | string | null, parent?: HTMLElement) => HTMLElement;
+export declare const checkExistence: (value: any, nameOnErrMsg: string) => void;
+export declare const clamp: (x: number, min: number, max: number) => number;
+export declare const getFlickingAttached: (val: Flicking | null) => Flicking;
+export declare const toArray: <T>(iterable: ArrayLike<T>) => T[];
+export declare const parseAlign: (align: LiteralUnion<ValueOf<typeof ALIGN>> | number, size: number) => number;
+export declare const parseBounce: (bounce: FlickingOptions["bounce"], size: number) => number[];
+export declare const parseArithmeticSize: (cssValue: number | string, base: number) => number | null;
+export declare const parseArithmeticExpression: (cssValue: number | string) => {
+    percentage: number;
+    absolute: number;
+} | null;
+export declare const parseCSSSizeValue: (val: string | number) => string;
+export declare const parsePanelAlign: (align: FlickingOptions["align"]) => string | number;
+export declare const getDirection: (start: number, end: number) => ValueOf<typeof DIRECTION>;
+export declare const parseElement: (element: ElementLike | ElementLike[]) => HTMLElement[];
+export declare const getMinusCompensatedIndex: (idx: number, max: number) => number;
+export declare const includes: <T>(array: T[], target: any) => target is T;
+export declare const isString: (val: any) => val is string;
+export declare const circulatePosition: (pos: number, min: number, max: number) => number;
+export declare const find: <T>(array: T[], checker: (val: T) => boolean) => T;
+export declare const findRight: <T>(array: T[], checker: (val: T) => boolean) => T;
+export declare const findIndex: <T>(array: T[], checker: (val: T) => boolean) => number;
+export declare const getProgress: (pos: number, prev: number, next: number) => number;
+export declare const getStyle: (el: HTMLElement) => CSSStyleDeclaration;
+export declare const setSize: (el: HTMLElement, { width, height }: Partial<{
+    width: number | string;
+    height: number | string;
+}>) => void;
+export declare const isBetween: (val: number, min: number, max: number) => boolean;
+export declare const circulateIndex: (index: number, max: number) => number;
+export declare const range: (end: number) => number[];
+export declare const getElementSize: ({ el, horizontal, useFractionalSize, useOffset, style }: {
+    el: HTMLElement;
+    horizontal: boolean;
+    useFractionalSize: boolean;
+    useOffset: boolean;
+    style: CSSStyleDeclaration;
+}) => number;
+export declare const setPrototypeOf: (o: any, proto: object) => any;
