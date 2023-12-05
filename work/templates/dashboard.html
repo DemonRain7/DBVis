@@ -7,8 +7,8 @@
 <head>
     <meta charset="utf-8" />
     <!--这里应该放咱们自己的图标，可以找一个-->
-    <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
-    <link rel="icon" type="image/png" href="../assets/img/favicon.ico">
+{#    <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">#}
+{#    <link rel="icon" type="image/png" href="../assets/img/favicon.ico">#}
 
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
@@ -24,18 +24,41 @@
     <!-- CSS Just for demo  -->
     <link href="{% static 'css/demo.css' %}" rel="stylesheet" />
     <!--CSS&js for Demonstrate-->
-    <script src="{% static 'node_modules/echarts/dist/echarts.min.js'%}"></script>
+    <script src="{% static 'js/echarts/echarts/dist/echarts.min.js'%}"></script>
     <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
-    <script src="{% static 'node_modules/echarts-wordcloud/dist/echarts-wordcloud.min.js' %}"></script>
+    <script src="{% static 'js/echarts/echarts-wordcloud/dist/echarts-wordcloud.min.js' %}"></script>
     <link rel="stylesheet" href="{% static 'css/charts_demon.css' %}">
     <link rel="stylesheet" href="{% static 'css/music.css' %}">
     <link rel="stylesheet" href="{% static 'css/rank_button.css' %}">
     <script src="{% static 'js/dark.js' %}"></script>
     <script src="{% static 'js/test.js'%}"></script>
+    <!--   Core JS Files   -->
+    <script src="{% static 'js/core/jquery.3.2.1.min.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/core/popper.min.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/core/bootstrap.min.js' %}" type="text/javascript"></script>
+    <!--  Plugin for Switches, full documentation here: http://www.jque.re/plugins/version3/bootstrap.switch/ -->
+    <script src="{% static 'js/plugins/bootstrap-switch.js' %}"></script>
+    <!--  Google Maps Plugin    -->
+    <script type="text/javascript" src="{% static 'js/googleapismap.js' %}"></script>
+    <!--  Chartist Plugin  -->
+    <script src="{% static 'js/plugins/chartist.min.js' %}"></script>
+    <!--  Notifications Plugin    -->
+    <script src="{% static 'js/plugins/bootstrap-notify.js' %}"></script>
+    <!-- Control Center for Light Bootstrap Dashboard: scripts for the example pages etc -->
+    <script src="{% static 'js/light-bootstrap-dashboard.js?v=2.0.0' %}" type="text/javascript"></script>
+    <!-- Light Bootstrap Dashboard DEMO methods, don't include it in your project! -->
+    <script src="{% static 'js/demo.js' %}"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Javascript method's body can be found in assets/js/demos.js
+            demo.initDashboardPageCharts();
+
+            demo.showNotification();
+
+        });
+    </script>
 
 
-
-    //done
 
     <style>
         @font-face {
@@ -59,7 +82,7 @@
             <div class="sidebar-wrapper">
 
                 <div class="logo">
-                    <a href="/" class="simple-text" style="font-family: 'Orbitronio';">
+                    <a href="/index" class="simple-text" style="font-family: 'Orbitronio';">
                         SCRIPT_VIS&nbsp; </a>
                 </div>
                 <ul class="nav">
@@ -134,14 +157,14 @@
                         </ul>
                         <ul class="navbar-nav ml-auto">
                             <li class="nav-item">
-                                <a class="nav-link" href="/#about" >
+                                <a class="nav-link" href="/index/#about" >
                                     <span class="no-icon " style="color: #eee;">About
                                         us</span>
                                 </a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link" href="/">
+                                <a class="nav-link" href="/index">
                                     <span class="no-icon" style="color: #eee;">Home</span>
                                 </a>
                             </li>
@@ -472,7 +495,12 @@
                                     style="width:100%;height: 2rem; display: flex; align-items: center;">
                                     <span
                                         style="display: inline-block; vertical-align: middle;padding-left: 3%;color: #eee;">
-                                        剧本人物关系</span>
+                                        剧本人物关系
+                                    </span>
+                                     <nav>
+                                        <li><a href="/index/#feedback">Feedback</a></li>
+                                    </nav>
+
                                 </div>
                             </div>
 
@@ -1353,6 +1381,7 @@
                                 <!-- 时间线-->
                                 <div id="scene"
                                     style="display:flex;justify-content:center;width:100%;height:10rem;margin-top: -20px;">
+
                                 </div>
                                 <script>
                                     var myCharts = echarts.init(document.getElementById('scene'));
@@ -7410,30 +7439,5 @@
 
     </div>
 </body>
-<!--   Core JS Files   -->
-<script src="{% static 'js/core/jquery.3.2.1.min.js' %}" type="text/javascript"></script>
-<script src="{% static 'js/core/popper.min.js' %}" type="text/javascript"></script>
-<script src="{% static 'js/core/bootstrap.min.js' %}" type="text/javascript"></script>
-<!--  Plugin for Switches, full documentation here: http://www.jque.re/plugins/version3/bootstrap.switch/ -->
-<script src="{% static 'js/plugins/bootstrap-switch.js' %}"></script>
-<!--  Google Maps Plugin    -->
-<script type="text/javascript" src="{% static 'js/googleapismap.js' %}"></script>
-<!--  Chartist Plugin  -->
-<script src="{% static 'js/plugins/chartist.min.js' %}"></script>
-<!--  Notifications Plugin    -->
-<script src="{% static 'js/plugins/bootstrap-notify.js' %}"></script>
-<!-- Control Center for Light Bootstrap Dashboard: scripts for the example pages etc -->
-<script src="{% static 'js/light-bootstrap-dashboard.js?v=2.0.0' %}" type="text/javascript"></script>
-<!-- Light Bootstrap Dashboard DEMO methods, don't include it in your project! -->
-<script src="{% static 'js/demo.js' %}"></script>
-<script type="text/javascript">
-    $(document).ready(function () {
-        // Javascript method's body can be found in assets/js/demos.js
-        demo.initDashboardPageCharts();
-
-        demo.showNotification();
-
-    });
-</script>
 
 </html>
