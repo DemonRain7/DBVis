@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Information</title>
+</head>
+<body>
+
+<h1>Script Information</h1>
+
+{% for script in scripts %}
+    <h2>{{ script.script_name }}</h2>
+    <p><strong>Director:</strong> {{ script.director }}</p>
+    <p><strong>Website:</strong> {{ script.website }}</p>
+    <p><strong>Score:</strong> {{ script.score }}</p>
+
+    <!-- Add sections for other related models (Highfreqword, Interaction, Scene, etc.) -->
+
+{% endfor %}
+
+</body>
+</html>

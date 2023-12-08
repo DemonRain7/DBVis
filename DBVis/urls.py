@@ -25,4 +25,5 @@ urlpatterns = [
     path('index/', indexview.show_index),
     path('list/', listview.show_list),
     path('work/', workview.show_work),
+    path('testdb/',workview.testdb)
 ]

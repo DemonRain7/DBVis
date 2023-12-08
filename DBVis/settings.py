@@ -79,9 +79,14 @@ WSGI_APPLICATION = 'DBVis.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',  # Django的引擎，还可以用Oracle等
+        'NAME': 'script_vis',  # 数据库名
+        'USER': 'root',  # 用户名
+        'PASSWORD': 'qiuyu1220',  # 密码
+        'HOST': '127.0.0.1',  # 数据库服务器地址
+        'PORT': 3306,  # 端口号（MySQL默认3306）
     }
+
 }
 
 
