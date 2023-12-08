@@ -4,20 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Database Information</title>
+
+    {# Assuming 'data' is a list of dictionaries containing your query results #}
+    {{ script|json_script:"script" }}
+    {{ scene|json_script:"scene" }}
 </head>
 <body>
 
-<h1>Script Information</h1>
+<h1>Tips</h1>
 
-{% for script in scripts %}
-    <h2>{{ script.script_name }}</h2>
-    <p><strong>Director:</strong> {{ script.director }}</p>
-    <p><strong>Website:</strong> {{ script.website }}</p>
-    <p><strong>Score:</strong> {{ script.score }}</p>
+<script>
+    // Access the Django template variables in JavaScript
+    const script_db = JSON.parse(document.getElementById('script').textContent);
+    const scene_db = JSON.parse(document.getElementById('scene').textContent);
 
-    <!-- Add sections for other related models (Highfreqword, Interaction, Scene, etc.) -->
+    // Now 'script_db' and 'scene_db' contain your data
+    console.log(script_db);
+    console.log(scene_db);
 
-{% endfor %}
+    // 显示某一行的script_id属性！！
+    const scriptId = script_db[0].script_id;
+    console.log('Script ID:', scriptId);
+
+    // 循环
+    for (let i = 0; i < script_db.length; i++) {
+        // Accessing script_id attribute of each script entry
+        const scriptId = script_db[i].script_id;
+        console.log('Script ID:', scriptId);
+    }
+
+    // Use 'script_db' and 'scene_db' in your JavaScript logic
+    // For example:
+</script>
 
 </body>
 </html>
