@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://kit.fontawesome.com/f881dad7c4.js" crossorigin="anonymous"></script>
   <style>
     body {
       margin: 0;
@@ -37,29 +38,45 @@
       fill: #fff;
     }
 
-    #fullscreen-button {
+    #fullscreen-icon {
       position: absolute;
-      top: 10px;
-      right: 10px;
+      bottom: 20px;
+      right: 20px;
       cursor: pointer;
-      background-color: #3498db;
       color: #fff;
-      border: none;
-      padding: 10px;
-      font-size: 14px;
+      transition: transform 0.3s;
+      font-size: 20px; /* 修改为你想要的大小 */;
+    }
+
+    #fullscreen-icon:hover {
+      transform: scale(1.3);
+    }
+
+    .tooltip {
+      position: absolute;
+      background: rgba(0, 0, 0, 0.7);
+      color: #fff;
+      padding: 5px;
+      border-radius: 3px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s;
     }
   </style>
 </head>
 
 <body>
 
-  <div id="relationship-chart"></div>
-  <button id="fullscreen-button">全屏</button>
+  <div id="relationship-chart">
+    <i id="fullscreen-icon" class="fas fa-expand"></i>
+    <div class="tooltip"></div>
+  </div>
 
   <script src="https://d3js.org/d3.v6.min.js"></script>
   <script>
-    let svg; // 保存 SVG 元素的引用
-    let simulation; // 保存力导向图模拟器的引用
+    let svg;
+    let simulation;
+    let tooltip;
 
     const chartDiv = document.getElementById("relationship-chart");
     let isFullscreen = false;
@@ -86,20 +103,16 @@
     };
 
     const initChartAfterFullScreen = () => {
-        // 销毁旧的 SVG 元素和模拟器
       if (svg) {
         svg.remove();
         simulation.stop();
       }
-      // 在全屏切换后重新初始化图表
       setTimeout(() => {
         initChart();
       }, 500);
     };
 
     const initChart = () => {
-
-
       const width = chartDiv.clientWidth;
       const height = chartDiv.clientHeight;
       const centerX = width / 2;
@@ -110,7 +123,11 @@
         .attr("width", width)
         .attr("height", height);
 
-      // 重新初始化 D3 力导向图
+      tooltip = d3.select("#relationship-chart")
+        .append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
+
       const clipPathRadius = Math.min(width, height) / 50;
       const linkDistance = Math.min(width, height) / 10;
 
@@ -134,7 +151,6 @@
         { source: 5, target: 6, relationship: "朋友" },
         { source: 6, target: 7, relationship: "同事" },
         { source: 7, target: 8, relationship: "家人" },
-        // 添加更多关系...
       ];
 
       simulation = d3.forceSimulation(nodes)
@@ -163,7 +179,9 @@
         .call(d3.drag()
           .on("start", dragstarted)
           .on("drag", dragged)
-          .on("end", dragended));
+          .on("end", dragended))
+          .on("mouseover", (event, d) => showTooltip(d.name, event.pageX, event.pageY))
+          .on("mouseout", hideTooltip);
 
       const text = svg.append("g")
         .selectAll("text")
@@ -192,7 +210,22 @@
       });
     };
 
-    document.getElementById("fullscreen-button").addEventListener("click", () => {
+    function showTooltip(name, x, y) {
+      tooltip.transition()
+        .duration(200)
+        .style("opacity", 0.9);
+      tooltip.html(name)
+        .style("left", (x + 10) + "px")
+        .style("top", (y - 20) + "px");
+    }
+
+    function hideTooltip() {
+      tooltip.transition()
+        .duration(200)
+        .style("opacity", 0);
+    }
+
+    document.getElementById("fullscreen-icon").addEventListener("click", () => {
       toggleFullScreen();
     });
 
@@ -213,7 +246,6 @@
       d.fy = null;
     }
 
-    // 初始化图表
     initChart();
 
   </script>
