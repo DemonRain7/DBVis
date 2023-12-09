@@ -21,17 +21,18 @@
 
 <script>
     // Access the Django template variables in JavaScript
-    const script_db = JSON.parse(document.getElementById('scripts').textContent);
     const scene_db = JSON.parse(document.getElementById('scenes').textContent);
     const character_db = JSON.parse(document.getElementById('characters').textContent);
     const interaction_db = JSON.parse(document.getElementById('interactions').textContent);
     const highfreqword_db = JSON.parse(document.getElementById('highfreqwords').textContent);
     const comment_db = JSON.parse(document.getElementById('comments').textContent);
+    const script_db = JSON.parse(document.getElementById('scripts').textContent);
     const feedback_db = JSON.parse(document.getElementById('feedbacks').textContent);
 
     // Now 'script_db' and 'scene_db' contain your data
-    console.log(script_db);
+    console.log(character_db);
     console.log(scene_db);
+    console.log(comment_db);
 
     // 显示某一行的script_id属性！！
     const scriptId = script_db[0].script_id;

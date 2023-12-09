@@ -498,7 +498,13 @@
                                         剧本人物关系
                                     </span>
                                      <nav>
-                                        <li><a href="/index/#feedback">Feedback</a></li>
+                                        <li><a href="/index#feedback">Feedback</a></li>
+                                         <script>
+                                                 $(document).ready(function () {
+                                                    // 打印 success 标志到控制台
+                                                    console.log('Feedback submission success:', {% if success %}true{% else %}false{% endif %});
+                                                 });
+                                         </script>
                                     </nav>
 
                                 </div>

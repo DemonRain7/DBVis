@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.35, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.34, for Win64 (x86_64)
 --
 -- Host: localhost    Database: script_vis
 -- ------------------------------------------------------
--- Server version	8.0.35
+-- Server version	8.0.34
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -14,6 +14,175 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `auth_group`
+--
+
+DROP TABLE IF EXISTS `auth_group`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `auth_group` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(150) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `auth_group`
+--
+
+LOCK TABLES `auth_group` WRITE;
+/*!40000 ALTER TABLE `auth_group` DISABLE KEYS */;
+/*!40000 ALTER TABLE `auth_group` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `auth_group_permissions`
+--
+
+DROP TABLE IF EXISTS `auth_group_permissions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `auth_group_permissions` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `group_id` int NOT NULL,
+  `permission_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `auth_group_permissions_group_id_permission_id_0cd325b0_uniq` (`group_id`,`permission_id`),
+  KEY `auth_group_permissio_permission_id_84c5c92e_fk_auth_perm` (`permission_id`),
+  CONSTRAINT `auth_group_permissio_permission_id_84c5c92e_fk_auth_perm` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`),
+  CONSTRAINT `auth_group_permissions_group_id_b120cbf9_fk_auth_group_id` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `auth_group_permissions`
+--
+
+LOCK TABLES `auth_group_permissions` WRITE;
+/*!40000 ALTER TABLE `auth_group_permissions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `auth_group_permissions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `auth_permission`
+--
+
+DROP TABLE IF EXISTS `auth_permission`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `auth_permission` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `content_type_id` int NOT NULL,
+  `codename` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `auth_permission_content_type_id_codename_01ab375a_uniq` (`content_type_id`,`codename`),
+  CONSTRAINT `auth_permission_content_type_id_2f476e4b_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=161 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `auth_permission`
+--
+
+LOCK TABLES `auth_permission` WRITE;
+/*!40000 ALTER TABLE `auth_permission` DISABLE KEYS */;
+INSERT INTO `auth_permission` VALUES (1,'Can add log entry',1,'add_logentry'),(2,'Can change log entry',1,'change_logentry'),(3,'Can delete log entry',1,'delete_logentry'),(4,'Can view log entry',1,'view_logentry'),(5,'Can add permission',2,'add_permission'),(6,'Can change permission',2,'change_permission'),(7,'Can delete permission',2,'delete_permission'),(8,'Can view permission',2,'view_permission'),(9,'Can add group',3,'add_group'),(10,'Can change group',3,'change_group'),(11,'Can delete group',3,'delete_group'),(12,'Can view group',3,'view_group'),(13,'Can add user',4,'add_user'),(14,'Can change user',4,'change_user'),(15,'Can delete user',4,'delete_user'),(16,'Can view user',4,'view_user'),(17,'Can add content type',5,'add_contenttype'),(18,'Can change content type',5,'change_contenttype'),(19,'Can delete content type',5,'delete_contenttype'),(20,'Can view content type',5,'view_contenttype'),(21,'Can add session',6,'add_session'),(22,'Can change session',6,'change_session'),(23,'Can delete session',6,'delete_session'),(24,'Can view session',6,'view_session'),(25,'Can add auth group',7,'add_authgroup'),(26,'Can change auth group',7,'change_authgroup'),(27,'Can delete auth group',7,'delete_authgroup'),(28,'Can view auth group',7,'view_authgroup'),(29,'Can add auth group permissions',8,'add_authgrouppermissions'),(30,'Can change auth group permissions',8,'change_authgrouppermissions'),(31,'Can delete auth group permissions',8,'delete_authgrouppermissions'),(32,'Can view auth group permissions',8,'view_authgrouppermissions'),(33,'Can add auth permission',9,'add_authpermission'),(34,'Can change auth permission',9,'change_authpermission'),(35,'Can delete auth permission',9,'delete_authpermission'),(36,'Can view auth permission',9,'view_authpermission'),(37,'Can add auth user',10,'add_authuser'),(38,'Can change auth user',10,'change_authuser'),(39,'Can delete auth user',10,'delete_authuser'),(40,'Can view auth user',10,'view_authuser'),(41,'Can add auth user groups',11,'add_authusergroups'),(42,'Can change auth user groups',11,'change_authusergroups'),(43,'Can delete auth user groups',11,'delete_authusergroups'),(44,'Can view auth user groups',11,'view_authusergroups'),(45,'Can add auth user user permissions',12,'add_authuseruserpermissions'),(46,'Can change auth user user permissions',12,'change_authuseruserpermissions'),(47,'Can delete auth user user permissions',12,'delete_authuseruserpermissions'),(48,'Can view auth user user permissions',12,'view_authuseruserpermissions'),(49,'Can add characters',13,'add_characters'),(50,'Can change characters',13,'change_characters'),(51,'Can delete characters',13,'delete_characters'),(52,'Can view characters',13,'view_characters'),(53,'Can add comment',14,'add_comment'),(54,'Can change comment',14,'change_comment'),(55,'Can delete comment',14,'delete_comment'),(56,'Can view comment',14,'view_comment'),(57,'Can add django admin log',15,'add_djangoadminlog'),(58,'Can change django admin log',15,'change_djangoadminlog'),(59,'Can delete django admin log',15,'delete_djangoadminlog'),(60,'Can view django admin log',15,'view_djangoadminlog'),(61,'Can add django content type',16,'add_djangocontenttype'),(62,'Can change django content type',16,'change_djangocontenttype'),(63,'Can delete django content type',16,'delete_djangocontenttype'),(64,'Can view django content type',16,'view_djangocontenttype'),(65,'Can add django migrations',17,'add_djangomigrations'),(66,'Can change django migrations',17,'change_djangomigrations'),(67,'Can delete django migrations',17,'delete_djangomigrations'),(68,'Can view django migrations',17,'view_djangomigrations'),(69,'Can add django session',18,'add_djangosession'),(70,'Can change django session',18,'change_djangosession'),(71,'Can delete django session',18,'delete_djangosession'),(72,'Can view django session',18,'view_djangosession'),(73,'Can add feedback',19,'add_feedback'),(74,'Can change feedback',19,'change_feedback'),(75,'Can delete feedback',19,'delete_feedback'),(76,'Can view feedback',19,'view_feedback'),(77,'Can add highfreqword',20,'add_highfreqword'),(78,'Can change highfreqword',20,'change_highfreqword'),(79,'Can delete highfreqword',20,'delete_highfreqword'),(80,'Can view highfreqword',20,'view_highfreqword'),(81,'Can add interaction',21,'add_interaction'),(82,'Can change interaction',21,'change_interaction'),(83,'Can delete interaction',21,'delete_interaction'),(84,'Can view interaction',21,'view_interaction'),(85,'Can add scene',22,'add_scene'),(86,'Can change scene',22,'change_scene'),(87,'Can delete scene',22,'delete_scene'),(88,'Can view scene',22,'view_scene'),(89,'Can add script',23,'add_script'),(90,'Can change script',23,'change_script'),(91,'Can delete script',23,'delete_script'),(92,'Can view script',23,'view_script'),(93,'Can add auth group',24,'add_authgroup'),(94,'Can change auth group',24,'change_authgroup'),(95,'Can delete auth group',24,'delete_authgroup'),(96,'Can view auth group',24,'view_authgroup'),(97,'Can add auth group permissions',25,'add_authgrouppermissions'),(98,'Can change auth group permissions',25,'change_authgrouppermissions'),(99,'Can delete auth group permissions',25,'delete_authgrouppermissions'),(100,'Can view auth group permissions',25,'view_authgrouppermissions'),(101,'Can add auth permission',26,'add_authpermission'),(102,'Can change auth permission',26,'change_authpermission'),(103,'Can delete auth permission',26,'delete_authpermission'),(104,'Can view auth permission',26,'view_authpermission'),(105,'Can add auth user',27,'add_authuser'),(106,'Can change auth user',27,'change_authuser'),(107,'Can delete auth user',27,'delete_authuser'),(108,'Can view auth user',27,'view_authuser'),(109,'Can add auth user groups',28,'add_authusergroups'),(110,'Can change auth user groups',28,'change_authusergroups'),(111,'Can delete auth user groups',28,'delete_authusergroups'),(112,'Can view auth user groups',28,'view_authusergroups'),(113,'Can add auth user user permissions',29,'add_authuseruserpermissions'),(114,'Can change auth user user permissions',29,'change_authuseruserpermissions'),(115,'Can delete auth user user permissions',29,'delete_authuseruserpermissions'),(116,'Can view auth user user permissions',29,'view_authuseruserpermissions'),(117,'Can add characters',30,'add_characters'),(118,'Can change characters',30,'change_characters'),(119,'Can delete characters',30,'delete_characters'),(120,'Can view characters',30,'view_characters'),(121,'Can add django admin log',31,'add_djangoadminlog'),(122,'Can change django admin log',31,'change_djangoadminlog'),(123,'Can delete django admin log',31,'delete_djangoadminlog'),(124,'Can view django admin log',31,'view_djangoadminlog'),(125,'Can add django content type',32,'add_djangocontenttype'),(126,'Can change django content type',32,'change_djangocontenttype'),(127,'Can delete django content type',32,'delete_djangocontenttype'),(128,'Can view django content type',32,'view_djangocontenttype'),(129,'Can add django migrations',33,'add_djangomigrations'),(130,'Can change django migrations',33,'change_djangomigrations'),(131,'Can delete django migrations',33,'delete_djangomigrations'),(132,'Can view django migrations',33,'view_djangomigrations'),(133,'Can add django session',34,'add_djangosession'),(134,'Can change django session',34,'change_djangosession'),(135,'Can delete django session',34,'delete_djangosession'),(136,'Can view django session',34,'view_djangosession'),(137,'Can add script',35,'add_script'),(138,'Can change script',35,'change_script'),(139,'Can delete script',35,'delete_script'),(140,'Can view script',35,'view_script'),(141,'Can add comment',36,'add_comment'),(142,'Can change comment',36,'change_comment'),(143,'Can delete comment',36,'delete_comment'),(144,'Can view comment',36,'view_comment'),(145,'Can add highfreqword',37,'add_highfreqword'),(146,'Can change highfreqword',37,'change_highfreqword'),(147,'Can delete highfreqword',37,'delete_highfreqword'),(148,'Can view highfreqword',37,'view_highfreqword'),(149,'Can add interaction',38,'add_interaction'),(150,'Can change interaction',38,'change_interaction'),(151,'Can delete interaction',38,'delete_interaction'),(152,'Can view interaction',38,'view_interaction'),(153,'Can add scene',39,'add_scene'),(154,'Can change scene',39,'change_scene'),(155,'Can delete scene',39,'delete_scene'),(156,'Can view scene',39,'view_scene'),(157,'Can add feedback',40,'add_feedback'),(158,'Can change feedback',40,'change_feedback'),(159,'Can delete feedback',40,'delete_feedback'),(160,'Can view feedback',40,'view_feedback');
+/*!40000 ALTER TABLE `auth_permission` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `auth_user`
+--
+
+DROP TABLE IF EXISTS `auth_user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `auth_user` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `password` varchar(128) NOT NULL,
+  `last_login` datetime(6) DEFAULT NULL,
+  `is_superuser` tinyint(1) NOT NULL,
+  `username` varchar(150) NOT NULL,
+  `first_name` varchar(150) NOT NULL,
+  `last_name` varchar(150) NOT NULL,
+  `email` varchar(254) NOT NULL,
+  `is_staff` tinyint(1) NOT NULL,
+  `is_active` tinyint(1) NOT NULL,
+  `date_joined` datetime(6) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `auth_user`
+--
+
+LOCK TABLES `auth_user` WRITE;
+/*!40000 ALTER TABLE `auth_user` DISABLE KEYS */;
+/*!40000 ALTER TABLE `auth_user` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `auth_user_groups`
+--
+
+DROP TABLE IF EXISTS `auth_user_groups`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `auth_user_groups` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `group_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `auth_user_groups_user_id_group_id_94350c0c_uniq` (`user_id`,`group_id`),
+  KEY `auth_user_groups_group_id_97559544_fk_auth_group_id` (`group_id`),
+  CONSTRAINT `auth_user_groups_group_id_97559544_fk_auth_group_id` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`),
+  CONSTRAINT `auth_user_groups_user_id_6a12ed8b_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `auth_user_groups`
+--
+
+LOCK TABLES `auth_user_groups` WRITE;
+/*!40000 ALTER TABLE `auth_user_groups` DISABLE KEYS */;
+/*!40000 ALTER TABLE `auth_user_groups` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `auth_user_user_permissions`
+--
+
+DROP TABLE IF EXISTS `auth_user_user_permissions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `auth_user_user_permissions` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `permission_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `auth_user_user_permissions_user_id_permission_id_14a6b632_uniq` (`user_id`,`permission_id`),
+  KEY `auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm` (`permission_id`),
+  CONSTRAINT `auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`),
+  CONSTRAINT `auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `auth_user_user_permissions`
+--
+
+LOCK TABLES `auth_user_user_permissions` WRITE;
+/*!40000 ALTER TABLE `auth_user_user_permissions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `auth_user_user_permissions` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `characters`
@@ -78,6 +247,117 @@ INSERT INTO `comment` VALUES (0,'0_1','\"2014.11.4\"','Paul Greenwood','\"There 
 UNLOCK TABLES;
 
 --
+-- Table structure for table `django_admin_log`
+--
+
+DROP TABLE IF EXISTS `django_admin_log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `django_admin_log` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `action_time` datetime(6) NOT NULL,
+  `object_id` longtext,
+  `object_repr` varchar(200) NOT NULL,
+  `action_flag` smallint unsigned NOT NULL,
+  `change_message` longtext NOT NULL,
+  `content_type_id` int DEFAULT NULL,
+  `user_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `django_admin_log_content_type_id_c4bce8eb_fk_django_co` (`content_type_id`),
+  KEY `django_admin_log_user_id_c564eba6_fk_auth_user_id` (`user_id`),
+  CONSTRAINT `django_admin_log_content_type_id_c4bce8eb_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`),
+  CONSTRAINT `django_admin_log_user_id_c564eba6_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`),
+  CONSTRAINT `django_admin_log_chk_1` CHECK ((`action_flag` >= 0))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `django_admin_log`
+--
+
+LOCK TABLES `django_admin_log` WRITE;
+/*!40000 ALTER TABLE `django_admin_log` DISABLE KEYS */;
+/*!40000 ALTER TABLE `django_admin_log` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `django_content_type`
+--
+
+DROP TABLE IF EXISTS `django_content_type`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `django_content_type` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `app_label` varchar(100) NOT NULL,
+  `model` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `django_content_type_app_label_model_76bd3d3b_uniq` (`app_label`,`model`)
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `django_content_type`
+--
+
+LOCK TABLES `django_content_type` WRITE;
+/*!40000 ALTER TABLE `django_content_type` DISABLE KEYS */;
+INSERT INTO `django_content_type` VALUES (1,'admin','logentry'),(3,'auth','group'),(2,'auth','permission'),(4,'auth','user'),(5,'contenttypes','contenttype'),(7,'index','authgroup'),(8,'index','authgrouppermissions'),(9,'index','authpermission'),(10,'index','authuser'),(11,'index','authusergroups'),(12,'index','authuseruserpermissions'),(13,'index','characters'),(14,'index','comment'),(15,'index','djangoadminlog'),(16,'index','djangocontenttype'),(17,'index','djangomigrations'),(18,'index','djangosession'),(19,'index','feedback'),(20,'index','highfreqword'),(21,'index','interaction'),(22,'index','scene'),(23,'index','script'),(6,'sessions','session'),(24,'work','authgroup'),(25,'work','authgrouppermissions'),(26,'work','authpermission'),(27,'work','authuser'),(28,'work','authusergroups'),(29,'work','authuseruserpermissions'),(30,'work','characters'),(36,'work','comment'),(31,'work','djangoadminlog'),(32,'work','djangocontenttype'),(33,'work','djangomigrations'),(34,'work','djangosession'),(40,'work','feedback'),(37,'work','highfreqword'),(38,'work','interaction'),(39,'work','scene'),(35,'work','script');
+/*!40000 ALTER TABLE `django_content_type` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `django_migrations`
+--
+
+DROP TABLE IF EXISTS `django_migrations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `django_migrations` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `app` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `applied` datetime(6) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `django_migrations`
+--
+
+LOCK TABLES `django_migrations` WRITE;
+/*!40000 ALTER TABLE `django_migrations` DISABLE KEYS */;
+INSERT INTO `django_migrations` VALUES (1,'contenttypes','0001_initial','2023-12-09 09:21:18.757727'),(2,'auth','0001_initial','2023-12-09 09:21:19.011902'),(3,'admin','0001_initial','2023-12-09 09:21:19.084659'),(4,'admin','0002_logentry_remove_auto_add','2023-12-09 09:21:19.091635'),(5,'admin','0003_logentry_add_action_flag_choices','2023-12-09 09:21:19.097616'),(6,'contenttypes','0002_remove_content_type_name','2023-12-09 09:21:19.139475'),(7,'auth','0002_alter_permission_name_max_length','2023-12-09 09:21:19.169375'),(8,'auth','0003_alter_user_email_max_length','2023-12-09 09:21:19.188141'),(9,'auth','0004_alter_user_username_opts','2023-12-09 09:21:19.195143'),(10,'auth','0005_alter_user_last_login_null','2023-12-09 09:21:19.228247'),(11,'auth','0006_require_contenttypes_0002','2023-12-09 09:21:19.231281'),(12,'auth','0007_alter_validators_add_error_messages','2023-12-09 09:21:19.238257'),(13,'auth','0008_alter_user_username_max_length','2023-12-09 09:21:19.270157'),(14,'auth','0009_alter_user_last_name_max_length','2023-12-09 09:21:19.302048'),(15,'auth','0010_alter_group_name_max_length','2023-12-09 09:21:19.316001'),(16,'auth','0011_update_proxy_permissions','2023-12-09 09:21:19.322974'),(17,'auth','0012_alter_user_first_name_max_length','2023-12-09 09:21:19.354871'),(18,'index','0001_initial','2023-12-09 09:21:19.364834'),(19,'sessions','0001_initial','2023-12-09 09:21:19.388617'),(20,'work','0001_initial','2023-12-09 09:21:19.404559'),(21,'work','0002_feedback','2023-12-09 09:21:19.409547');
+/*!40000 ALTER TABLE `django_migrations` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `django_session`
+--
+
+DROP TABLE IF EXISTS `django_session`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `django_session` (
+  `session_key` varchar(40) NOT NULL,
+  `session_data` longtext NOT NULL,
+  `expire_date` datetime(6) NOT NULL,
+  PRIMARY KEY (`session_key`),
+  KEY `django_session_expire_date_a5c62663` (`expire_date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `django_session`
+--
+
+LOCK TABLES `django_session` WRITE;
+/*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
+/*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `feedback`
 --
 
@@ -85,11 +365,13 @@ DROP TABLE IF EXISTS `feedback`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `feedback` (
-  `feedback_id` varchar(255) NOT NULL,
+  `feedback_id` bigint NOT NULL,
   `user_id` bigint DEFAULT NULL,
   `feedback_script_id` bigint unsigned DEFAULT NULL,
   `feedback_time` date DEFAULT NULL,
   `feedback_content` text,
+  `feedback_email` varchar(255) DEFAULT NULL,
+  `is_reply` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`feedback_id`),
   KEY `feedback_script_id` (`feedback_script_id`),
   CONSTRAINT `feedback_ibfk_1` FOREIGN KEY (`feedback_script_id`) REFERENCES `script` (`Script_id`)
@@ -102,6 +384,7 @@ CREATE TABLE `feedback` (
 
 LOCK TABLES `feedback` WRITE;
 /*!40000 ALTER TABLE `feedback` DISABLE KEYS */;
+INSERT INTO `feedback` VALUES (0,NULL,0,'2023-12-09','1','1064132526@qq.com',1),(1,NULL,0,'2023-12-09','2','rainqiu@stu.scu.edu.cn',0);
 /*!40000 ALTER TABLE `feedback` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -233,4 +516,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-12-09 15:31:24
+-- Dump completed on 2023-12-09 17:45:38

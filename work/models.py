@@ -151,11 +151,13 @@ class DjangoSession(models.Model):
 
 
 class Feedback(models.Model):
-    feedback_id = models.CharField(primary_key=True, max_length=255)
+    feedback_id = models.BigIntegerField(primary_key=True)
     user_id = models.BigIntegerField(blank=True, null=True)
     feedback_script = models.ForeignKey('Script', models.DO_NOTHING, blank=True, null=True)
     feedback_time = models.DateField(blank=True, null=True)
     feedback_content = models.TextField(blank=True, null=True)
+    feedback_email = models.CharField(max_length=255, blank=True, null=True)
+    is_reply = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False

@@ -505,7 +505,7 @@ demo = {
 
         $.notify({
             icon: "nc-icon nc-app",
-            message: "Welcome to SCRIPT_VIS site, hope our work can ENLIGHTEN you!"
+            message: "Welcome to SCRIPT_VIS site, hope our work can ENLIGHTEN you!",
 
         }, {
             type: type[color],

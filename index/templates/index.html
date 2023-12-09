@@ -75,56 +75,54 @@
 			</article>
 
             <!--feedback-->
-            <article id="feedback">
-				<h2 class="major">Feedback</h2>
-				<span class="image main"><img src="{% static 'images/pic01.jpg' %}" alt="" /></span>
-                <form method="post" action="#">
-                    <div class="fields">
-                        <div class="field half">
-                            <label for="name">Name</label>
-                            <input type="text" name="name" id="name" placeholder="Your Name" required />
-                        </div>
-                        <div class="field half">
-                            <label for="email">Email</label>
-                            <input type="email" name="email" id="email" placeholder="Your Email" required />
-                        </div>
-                        <div class="field">
-                            <label for="category">Category</label>
-                            <select name="category" id="category">
-                                <option value="">-</option>
-                                <option value="manufacturing">Manufacturing</option>
-                                <option value="shipping">Shipping</option>
-                                <option value="administration">Administration</option>
-                                <option value="human_resources">Human Resources</option>
-                            </select>
-                        </div>
-                        <div class="field half">
-                            <label>Priority</label>
-                            <input type="radio" id="priority-low" name="priority" value="low" checked />
-                            <label for="priority-low">Low</label>
-                            <input type="radio" id="priority-high" name="priority" value="high" />
-                            <label for="priority-high">High</label>
-                        </div>
-                        <div class="field half">
-                            <input type="checkbox" id="copy" name="copy" />
-                            <label for="copy">Email me a copy</label>
-                        </div>
-                        <div class="field half">
-                            <input type="checkbox" id="human" name="human" checked />
-                            <label for="human">Not a robot</label>
-                        </div>
-                        <div class="field">
-                            <label for="message">Message</label>
-                            <textarea name="message" id="message" placeholder="Enter your message" rows="6" required></textarea>
-                        </div>
-                    </div>
-                    <ul class="actions">
-                        <li><input type="submit" value="Send Message" class="primary" /></li>
-                        <li><input type="reset" value="Reset" /></li>
-                    </ul>
-                </form>
+<article id="feedback">
+    <h2 class="major">Feedback</h2>
+    <span class="image main"><img src="{% static 'images/pic01.jpg' %}" alt="" /></span>
+    <form method="post" action="">
+        <div class="fields">
+            {% csrf_token %}
+            <div class="field half">
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email" placeholder="Your Email" required />
+            </div>
+            <div class="field">
+                <label for="script">Select Script</label>
+                <select name="script" id="script">
+                    <!-- Loop through script data from the server-side -->
+                    {% for script in scripts %}
+                        <option value="{{ script.script_id }}">{{ script.script_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
 
-			</article>
+            <div class="field half">
+                <input type="checkbox" id="copy" name="copy" />
+                <label for="copy">Email me a copy</label>
+            </div>
+
+            <div class="field">
+                <label for="message">Message</label>
+                <textarea name="message" id="message" placeholder="Enter your message" rows="6" required></textarea>
+            </div>
+        </div>
+        <ul class="actions">
+            <li><input type="submit" value="Send Message" class="primary" /></li>
+            <li><input type="reset" value="Reset" /></li>
+            <!-- 新增关闭按钮，替换为 input 元素 -->
+            <li><input type="button" value="Close" class="close-button" onclick="closeFeedback()" /></li>
+        </ul>
+    </form>
+</article>
+
+
+<!-- JavaScript部分 -->
+<script>
+    function closeFeedback() {
+        // 在这里添加关闭按钮的逻辑，可以是跳转到/work/页面或者关闭弹窗等
+        // 例如，跳转到/work/页面
+        window.location.href = '/work/';
+    }
+</script>
 
 
 		</div>

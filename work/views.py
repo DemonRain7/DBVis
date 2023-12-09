@@ -54,7 +54,8 @@ def testdb(request):
     highfreqwords = list(Highfreqword.objects.filter(script_id=scp_id).values())
     interactions = list(Interaction.objects.filter(script_id=scp_id).values())
 
-    # Define a custom sorting function for scene_id
+
+    # DIYs
     def custom_sort(scene):
         # Split the scene_id and convert the second part to an integer
         return int(scene['scene_id'].split('_')[1])
