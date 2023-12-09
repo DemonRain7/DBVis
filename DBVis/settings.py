@@ -77,6 +77,7 @@ WSGI_APPLICATION = 'DBVis.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',  # Django的引擎，还可以用Oracle等
@@ -86,7 +87,6 @@ DATABASES = {
         'HOST': '127.0.0.1',  # 数据库服务器地址
         'PORT': 3306,  # 端口号（MySQL默认3306）
     }
-
 }
 
 

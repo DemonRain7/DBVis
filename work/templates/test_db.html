@@ -6,8 +6,14 @@
     <title>Database Information</title>
 
     {# Assuming 'data' is a list of dictionaries containing your query results #}
-    {{ script|json_script:"script" }}
-    {{ scene|json_script:"scene" }}
+    {{ scripts|json_script:"scripts" }}
+    {{ scenes|json_script:"scenes" }}
+    {{ characters|json_script:"characters" }}
+    {{ interactions|json_script:"interactions" }}
+    {{ highfreqwords|json_script:"highfreqwords" }}
+    {{ comments|json_script:"comments" }}
+    {{ feedbacks|json_script:"feedbacks" }}
+
 </head>
 <body>
 
@@ -15,8 +21,13 @@
 
 <script>
     // Access the Django template variables in JavaScript
-    const script_db = JSON.parse(document.getElementById('script').textContent);
-    const scene_db = JSON.parse(document.getElementById('scene').textContent);
+    const script_db = JSON.parse(document.getElementById('scripts').textContent);
+    const scene_db = JSON.parse(document.getElementById('scenes').textContent);
+    const character_db = JSON.parse(document.getElementById('characters').textContent);
+    const interaction_db = JSON.parse(document.getElementById('interactions').textContent);
+    const highfreqword_db = JSON.parse(document.getElementById('highfreqwords').textContent);
+    const comment_db = JSON.parse(document.getElementById('comments').textContent);
+    const feedback_db = JSON.parse(document.getElementById('feedbacks').textContent);
 
     // Now 'script_db' and 'scene_db' contain your data
     console.log(script_db);
