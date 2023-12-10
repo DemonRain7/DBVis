@@ -81,6 +81,7 @@ class Characters(models.Model):
     script = models.ForeignKey('Script', models.DO_NOTHING, db_column='Script_id', blank=True, null=True)  # Field name made lowercase.
     character_id = models.CharField(db_column='Character_id', primary_key=True, max_length=255)  # Field name made lowercase.
     character_name = models.CharField(db_column='Character_name', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    character_scene = models.CharField(db_column='Character_scene', max_length=512, blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -150,6 +151,17 @@ class DjangoSession(models.Model):
         db_table = 'django_session'
 
 
+class EmoAnalysis(models.Model):
+    ea_id = models.CharField(primary_key=True, max_length=255)
+    script = models.ForeignKey('Script', models.DO_NOTHING, db_column='Script_id', blank=True, null=True)  # Field name made lowercase.
+    expert_result = models.TextField(blank=True, null=True)
+    user_result = models.TextField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'emo_analysis'
+
+
 class Feedback(models.Model):
     feedback_id = models.BigIntegerField(primary_key=True)
     user_id = models.BigIntegerField(blank=True, null=True)
@@ -168,6 +180,7 @@ class Highfreqword(models.Model):
     script = models.ForeignKey('Script', models.DO_NOTHING, db_column='Script_id', blank=True, null=True)  # Field name made lowercase.
     word = models.CharField(db_column='Word', max_length=255, blank=True, null=True)  # Field name made lowercase.
     word_id = models.CharField(db_column='Word_id', primary_key=True, max_length=255)  # Field name made lowercase.
+    word_freq = models.IntegerField(db_column='Word_freq', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
