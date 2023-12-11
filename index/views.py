@@ -1,5 +1,6 @@
 from django.db.models import Max
-from django.shortcuts import render,HttpResponse
+from django.shortcuts import render, HttpResponse, redirect
+from django.urls import reverse
 from django.utils import timezone
 
 from .models import *
@@ -61,8 +62,8 @@ def show_index(request):
         # 添加成功或失败的标志
         success = True if feedback_instance else False
 
-        # 返回到 /work 页面，并传递标志
-        return render(request, '../../work/templates/dashboard.html', {'success': success})
+        # 重定向到/work应用程序中的dashboard页面
+        return redirect(reverse('work:show_work'))
 
     return render(request, 'index.html', context)
 

@@ -72,7 +72,8 @@
             text-shadow: 1px 1px 2px #000;
         }
     </style>
-
+    {{ comments|json_script:"comments" }}
+    {{ emotions|json_script:"emotions" }}
 </head>
 
 <body>
@@ -197,7 +198,21 @@
                                         var chartDom4 = document.getElementById('cvb1');
                                         var myChart4 = echarts.init(chartDom4, 'test');
                                         var option4;
-
+                                        const comment_db = JSON.parse(document.getElementById('comments').textContent);
+                                        var expertComments = comment_db.filter(function(comment) {
+                                            return comment.comment_type === 'expert';
+                                        });
+                                        var negativeScores = expertComments.map(function(comment) {
+                                            return comment.negative_score;
+                                        });
+                                        
+                                        var neutralScores = expertComments.map(function(comment) {
+                                            return comment.neutral_score;
+                                        });
+                                        
+                                        var positiveScores = expertComments.map(function(comment) {
+                                            return comment.positive_score;
+                                        });
                                         option4 = {
                                             angleAxis: {
                                                 type: 'category',
@@ -219,7 +234,7 @@
                                             series: [
                                                 {
                                                     type: 'bar',
-                                                    data: [0.063, 0.047, 0.048, 0.087, 0.061, 0.065, 0.024, 0.065, 0.059, 0.036],
+                                                    data: negativeScores,
                                                     coordinateSystem: 'polar',
                                                     name: 'Neg',
                                                     stack: 'a',
@@ -229,7 +244,7 @@
                                                 },
                                                 {
                                                     type: 'bar',
-                                                    data: [0.821, 0.827, 0.826, 0.793, 0.791, 0.826, 0.85, 0.781, 0.786, 0.838],
+                                                    data: neutralScores,
                                                     coordinateSystem: 'polar',
                                                     name: 'Neu',
                                                     stack: 'a',
@@ -239,7 +254,7 @@
                                                 },
                                                 {
                                                     type: 'bar',
-                                                    data: [0.116, 0.126, 0.126, 0.12, 0.147, 0.109, 0.126, 0.153, 0.154, 0.126],
+                                                    data: positiveScores,
                                                     coordinateSystem: 'polar',
                                                     name: 'Pos',
                                                     stack: 'a',
@@ -253,9 +268,7 @@
                                                 data: ['Neg', 'Neu', 'Pos']
                                             }
                                         };
-
                                         option4 && myChart4.setOption(option4);
-
                                     </script>
 
 
@@ -267,14 +280,26 @@
                                     var chartDom6 = document.getElementById('rankonComment');
                                     var myChart_rank = echarts.init(chartDom6, 'test');
                                     var option_rank;
-
+                                    const emotion_db = JSON.parse(document.getElementById('emotions').textContent);
+                                    const expertResultData1 = emotion_db[0].expert_result;
+                                    const expertResultData2 = emotion_db[0].user_result;
                                     // prettier-ignore
-                                    const femaleData = [
-                                        [0.9986, 1415635200000], [0.9959, 1415635200000], [0.9943, 1426435200000], [0.8222, 1414252800000], [0.9956, 1415980800000], [0.9979, 1414684800000], [0.9933, 1415116800000], [0.9988, 1500566400000], [0.9991, 1415030400000], [0.9888, 1415030400000]];
+                                    const regex = /\[(-?\d+\.\d+),\s*(-?\d+)\]/g;
+                                    const resultArray1 = [];
+                                    let match;
+                                    while ((match = regex.exec(expertResultData1)) !== null) {
+                                        resultArray1.push([Number(match[1]), Number(match[2])]);
+                                    }
+                                    const femaleData = resultArray1                        
+                                    console.log(femaleData) 
                                     // prettier-ignore
-                                    const maleDeta = [
-                                        [0.836, 1651939200000], [0.988, 1656086400000], [0.9786, 1617638400000], [0.0398, 1561478400000], [0.8391, 1635436800000], [0.9939, 1453824000000], [-0.6131, 1428249600000], [0.9769, 1529769600000], [-0.985, 1416844800000], [-0.4926, 1605369600000], [0.9993, 1561910400000], [0.9928, 1415376000000], [0.9342, 1657036800000], [0.9997, 1419436800000], [0.9377, 1669132800000], [0.9895, 1429372800000], [0.9991, 1415808000000], [0.9812, 1428422400000], [0.9519, 1417363200000], [0.9341, 1526054400000], [0.0, 1598544000000], [0.9987, 1427990400000], [0.9941, 1415721600000], [0.9457, 1415376000000], [0.999, 1415116800000], [0.96, 1674057600000], [0.9994, 1415376000000], [0.9993, 1415289600000], [0.9136, 1555430400000], [0.9917, 1415116800000], [0.9848, 1415980800000], [0.9799, 1599408000000], [0.9875, 1427990400000], [0.8065, 1673020800000], [0.9386, 1622476800000], [0.4019, 1570291200000], [0.9836, 1424534400000], [0.9559, 1415635200000], [0.9572, 1415116800000], [0.9961, 1415808000000], [0.6979, 1596384000000], [0.9865, 1418486400000], [-0.6913, 1415548800000], [0.8175, 1595347200000], [0.9996, 1600790400000], [0.9254, 1656604800000], [0.9457, 1605196800000], [0.8971, 1415548800000], [0.9475, 1622822400000], [0.9887, 1415894400000], [0.8435, 1415894400000], [0.624, 1612281600000], [0.9632, 1415548800000], [-0.1523, 1629388800000], [0.9982, 1415548800000], [-0.8364, 1426694400000], [0.9445, 1660665600000], [0.975, 1415808000000], [0.6597, 1575734400000], [0.9333, 1487260800000], [0.9784, 1622995200000], [0.6657, 1597766400000], [0.9159, 1415635200000], [-0.4957, 1652371200000], [0.9073, 1417363200000], [0.9244, 1596124800000], [-0.5694, 1415289600000], [0.8998, 1416240000000], [0.8338, 1652630400000], [0.9605, 1670688000000], [0.9946, 1415376000000], [0.9707, 1416240000000], [-0.9827, 1416758400000], [0.2263, 1415635200000], [0.9118, 1430582400000], [0.989, 1546185600000], [0.5029, 1415289600000], [0.9474, 1415376000000], [-0.9085, 1416067200000], [0.9986, 1416067200000], [0.9971, 1416585600000], [0.9813, 1415635200000], [0.999, 1415116800000], [0.9195, 1424448000000], [0.9984, 1523894400000], [0.891, 1598112000000], [0.5395, 1624550400000], [0.8349, 1655136000000], [0.9726, 1673712000000], [0.0, 1612368000000], [0.9821, 1552060800000], [0.8807, 1568908800000], [0.5023, 1656864000000], [0.9372, 1656864000000], [0.4497, 1612195200000], [0.9898, 1674144000000], [-0.1513, 1569340800000], [0.277, 1657641600000], [0.9383, 1660579200000], [0.9142, 1622131200000]
-                                    ];
+                                    const resultArray2 = [];
+                                    while ((match = regex.exec(expertResultData2)) !== null) {
+                                        resultArray2.push([Number(match[1]), Number(match[2])]);
+                                    }
+                                    const maleDeta = resultArray2
+                                    {% comment %} maleDeta.push(emotion_db[0].user_result){% endcomment %}
+                                    console.log(maleDeta) 
                                     function calculateAverage(data, dim) {
                                         let total = 0;
                                         for (var i = 0; i < data.length; i++) {
@@ -369,123 +394,96 @@
 
                             </div>
 
-                            <!--词云图-->
-                            <div class="card"
-                                style="margin-left:-25px;margin-top: -25px;background-color: rgba(0, 0, 0, 0);border: 1px solid rgba(255, 255, 255, 0.5);">
-                                <div class="title1"
-                                    style="width:100%;height: 2rem; display: flex; align-items: center;">
-                                    <span
-                                        style="display: inline-block; vertical-align: middle;padding-left: 3%;color: #eee;">
-                                        词云</span>
-                                </div>
-                            </div>
-                            <div class="card"
-                                style="margin-left:-25px;margin-top: -25px;background-color:  rgba(255, 255, 255, 0.05);border: 1px solid rgba(255, 255, 255, 0.5);">
-                                <div id="wordclouds"
-                                    style="display:flex;justify-content:center;width:100%;height:30rem;margin-top: 0px;">
-                                </div>
-                                <script>
-                                    var myChart3 = echarts.init(document.getElementById('wordclouds'), 'dark');
-                                    function getRandomColor() {
-                                        var letters = '0123456789ABCDEF';
-                                        var color = '#';
-                                        for (var i = 0; i < 6; i++) {
-                                            color += letters[Math.floor(Math.random() * 16)];
-                                        }
-                                        return color;
-                                    }
-                                    // 配置项
-                                    var option3 = {
-                                        // 词云图标题
-                                        title: {
-                                            text: '',
-                                            textStyle: {
-                                                fontSize: 32,
-                                                fontWeight: 'bold',
-                                                color: '#333',
-                                            }
-                                        },
+<!--词云图-->
+<div class="card"
+style="margin-left:-25px;margin-top: -25px;background-color: rgba(0, 0, 0, 0);border: 1px solid rgba(255, 255, 255, 0.5);">
+<div class="title1"
+    style="width:100%;height: 2rem; display: flex; align-items: center;">
+    <span
+        style="display: inline-block; vertical-align: middle;padding-left: 3%;color: #eee;">
+        词云</span>
+</div>
+</div>
+<div class="card"
+style="margin-left:-25px;margin-top: -25px;background-color:  rgba(255, 255, 255, 0.05);border: 1px solid rgba(255, 255, 255, 0.5);">
+<div id="wordclouds"
+    style="display:flex;justify-content:center;width:100%;height:30rem;margin-top: 0px;">
+</div>
+<script>
+    // 获取从后端传递的数据
+    var highfreqwords = {{ highfreqwords|safe }};
 
-                                        // 词云图系列
-                                        series: [{
-                                            name: '词云',
-                                            type: 'wordCloud',
-                                            shape: 'circle',
-                                            size: ['80%', '80%'],
-                                            rotationRange: [0, 360],
-                                            rotationStep: 45,
-                                            gridSize: 8,
-                                            drawOutOfBound: false,
-                                            data: [
-                                                { name: 'ADMINISTRATOR', value: 12, textStyle: { color: getRandomColor() } },
-                                                { name: 'AIR TRAFFIC CONTROL', value: 0, textStyle: { color: getRandomColor() } },
-                                                { name: 'ANSEN', value: 13, textStyle: { color: getRandomColor() } },
-                                                { name: 'BALLPLAYER', value: 4, textStyle: { color: getRandomColor() } },
-                                                { name: 'BLACK', value: 1, textStyle: { color: getRandomColor() } },
-                                                { name: 'BLACKNESS', value: 160, textStyle: { color: getRandomColor() } },
-                                                { name: 'CASE', value: 64, textStyle: { color: getRandomColor() } },
-                                                { name: 'CB OPERATOR', value: 2, textStyle: { color: getRandomColor() } },
-                                                { name: 'COOPER', value: 279, textStyle: { color: getRandomColor() } },
-                                                { name: 'DOCTOR', value: 7, textStyle: { color: getRandomColor() } },
-                                                { name: 'DONALD', value: 19, textStyle: { color: getRandomColor() } },
-                                                { name: 'DOYLE', value: 65, textStyle: { color: getRandomColor() } },
-                                                { name: 'FARMER', value: 1, textStyle: { color: getRandomColor() } },
-                                                { name: 'MURPH', value: 27, textStyle: { color: getRandomColor() } },
-                                                { name: 'NSA AGENT', value: 8, textStyle: { color: getRandomColor() } },
-                                                { name: 'PRINCIPAL', value: 7, textStyle: { color: getRandomColor() } },
-                                                { name: 'RIGGS', value: 3, textStyle: { color: getRandomColor() } },
-                                                { name: 'ROBOT', value: 3, textStyle: { color: getRandomColor() } },
-                                                { name: 'ROTH', value: 59, textStyle: { color: getRandomColor() } },
-                                                { name: 'TARS', value: 30, textStyle: { color: getRandomColor() } },
-                                                { name: 'TOM', value: 22, textStyle: { color: getRandomColor() } },
-                                                { name: 'CRASHES towards them', value: 1, textStyle: { color: getRandomColor() } },
-                                                { name: 'Cooper FIRES', value: 1, textStyle: { color: getRandomColor() } },
-                                                { name: 'COOPER BRAND', value: 7, textStyle: { color: getRandomColor() } },
-                                                { name: 'DEAFENING SCREAM', value: 1, textStyle: { color: getRandomColor() } },
-                                                { name: 'DOYLE BRAND', value: 1, textStyle: { color: getRandomColor() } },
-                                                { name: 'EMILY COOPER', value: 1, textStyle: { color: getRandomColor() } },
-                                                { name: 'COOPER DOCTOR', value: 1, textStyle: { color: getRandomColor() } },
-                                                { name: 'GOVERNMENT MAN', value: 1, textStyle: { color: getRandomColor() } },
-                                                { name: 'MURPH WIFE', value: 1, textStyle: { color: getRandomColor() } },
-                                                { name: 'BRAND I dont know', value: 3, textStyle: { color: getRandomColor() } },
-                                                { name: 'TOM COOPER', value: 3, textStyle: { color: getRandomColor() } },
-                                                { name: 'WHITENESS', value: 1, textStyle: { color: getRandomColor() } }
-                                            ],
-                                        }],
-                                        textStyle: {
-                                            normal: {
-                                                fontFamily: '微软雅黑',
-                                                fontWeight: 'bold',
-                                                color: function (params) {
-                                                    return 'rgb(' + [
-                                                        Math.round(Math.random() * 255),
-                                                        Math.round(Math.random() * 255),
-                                                        Math.round(Math.random() * 255)
-                                                    ].join(',') + ')';
-                                                }
-                                            },
-                                            emphasis: {
-                                                shadowBlur: 10,
-                                                shadowColor: '#333'
-                                            }
-                                        },
-                                        // 词云图提示框
-                                        tooltip: {
-                                            show: true,
-                                            formatter: function (params) {
-                                                return params.name + ': ' + params.value;
-                                            }
-                                        }
-                                    };
+    // 在控制台中输出获取到的数据，以便调试
+    console.log("Highfreqwords data:", highfreqwords);
 
-                                    // 渲染图表
-                                    myChart3.setOption(option3);
-                                </script>
+    // 初始化 ECharts 实例
+    var myChart3 = echarts.init(document.getElementById('wordclouds'), 'dark');
 
-                            </div>
+    // 随机生成颜色的函数
+    function getRandomColor() {
+        return '#' + Math.floor(Math.random() * 16777215).toString(16);
+    }
 
+    // 将从后端获取的数据转换成词云图所需的格式
+    var wordCloudData = highfreqwords.map(function (item) {
+        return {
+            name: item.word,
+            value: item.word_freq,
+            textStyle: { color: getRandomColor() }
+        };
+    });
 
-                        </div>
+    // 配置项
+    var option3 = {
+        title: {
+            text: '',
+            textStyle: {
+                fontSize: 32,
+                fontWeight: 'bold',
+                color: '#333',
+            }
+        },
+        series: [{
+            name: '词云',
+            type: 'wordCloud',
+            shape: 'circle',
+            size: ['80%', '80%'],
+            rotationRange: [0, 360],
+            rotationStep: 45,
+            gridSize: 8,
+            drawOutOfBound: false,
+            data: wordCloudData,
+        }],
+        textStyle: {
+            normal: {
+                fontFamily: '微软雅黑',
+                fontWeight: 'bold',
+                color: function (params) {
+                    return 'rgb(' + [
+                        Math.round(Math.random() * 255),
+                        Math.round(Math.random() * 255),
+                        Math.round(Math.random() * 255)
+                    ].join(',') + ')';
+                }
+            },
+            emphasis: {
+                shadowBlur: 10,
+                shadowColor: '#333'
+            }
+        },
+        tooltip: {
+            show: true,
+            formatter: function (params) {
+                return params.name + ': ' + params.value;
+            }
+        }
+    };
+
+    // 渲染图表
+    myChart3.setOption(option3);
+</script>
+</div>
+</div>
 
                         <div class="col-md-6">
                             <!--人物关系-->
@@ -516,108 +514,107 @@
                                     style="padding-top:2%;width:85%;height:45rem;padding-left: 15%;background-color: rgba(0, 0, 0, 0)">
                                 </div>
                                 <script>
+                                    var characters = {{ characters|safe }};
                                     var chartDom = document.getElementById('b1');
                                     var myChart = echarts.init(chartDom, 'dark');
                                     var option;
-
                                     myChart.showLoading();
 
-                                    // 假设你已经准备好了一个名为 data 的数组作为模板
                                     var data = {
                                         nodes: [
                                             {
-                                                "id": "0",
-                                                "name": "ANSEN",
+                                                "id": characters[0].character_id,
+                                                "name": characters[0].character_name,
                                                 "symbolSize": 8,
-                                                "x": 436.8000183105469,
-                                                "y": 55.400020599365234,
+                                                "x": 1,
+                                                "y": 1,
                                                 "value": 8,
                                                 "category": 0
                                             },
                                             {
-                                                "id": "1",
-                                                "name": "ASSITANT",
+                                                "id": characters[1].character_id,
+                                                "name": characters[1].character_name,
                                                 "symbolSize": 4,
-                                                "x": 445.6000061035156,
-                                                "y": 85,
+                                                "x": 1,
+                                                "y": 1,
                                                 "value": 4,
                                                 "category": 0
                                             },
                                             {
-                                                "id": "2",
-                                                "name": "COOPER",
+                                                "id": characters[2].character_id,
+                                                "name": characters[2].character_name,
                                                 "symbolSize": 100,
-                                                "x": 200,
-                                                "y": 100,
+                                                "x": 1,
+                                                "y": 1,
                                                 "value": 1174,
                                                 "category": 7
                                             },
                                             {
-                                                "id": "3",
-                                                "name": "NSA AGENT",
+                                                "id": characters[3].character_id,
+                                                "name": characters[3].character_name,
                                                 "symbolSize": 3,
-                                                "x": -24,
-                                                "y": 203,
+                                                "x": 1,
+                                                "y": 1,
                                                 "value": 3,
                                                 "category": 0
                                             },
                                             {
-                                                "id": "4",
-                                                "name": "TOM",
+                                                "id": characters[4].character_id,
+                                                "name": characters[4].character_name,
                                                 "symbolSize": 30,
-                                                "x": -307,
-                                                "y": 42,
+                                                "x": 1,
+                                                "y": 1,
                                                 "value": 72,
                                                 "category": 3
                                             },
                                             {
-                                                "id": "5",
-                                                "name": "MURPH",
+                                                "id": characters[5].character_id,
+                                                "name": characters[5].character_name,
                                                 "symbolSize": 45,
-                                                "x": 30,
-                                                "y": -30,
+                                                "x": 1,
+                                                "y": 1,
                                                 "value": 224,
                                                 "category": 4
                                             },
                                             {
-                                                "id": "6",
-                                                "name": "DONALD",
+                                                "id": characters[6].character_id,
+                                                "name": characters[6].character_name,
                                                 "symbolSize": 30,
-                                                "x": -33,
-                                                "y": 48,
+                                                "x": 1,
+                                                "y": 1,
                                                 "value": 70,
                                                 "category": 3
                                             },
                                             {
-                                                "id": "7",
-                                                "name": "GOVERNMENT MAN",
+                                                "id": characters[7].character_id,
+                                                "name": characters[7].character_name,
                                                 "symbolSize": 7,
-                                                "x": -380,
-                                                "y": 47,
+                                                "x": 1,
+                                                "y": 1,
                                                 "value": 7,
                                                 "category": 0
                                             },
                                             {
-                                                "id": "8",
-                                                "name": "BALLPLAYER",
+                                                "id": characters[8].character_id,
+                                                "name": characters[8].character_name,
                                                 "symbolSize": 8,
-                                                "x": -32,
-                                                "y": 308,
+                                                "x": 1,
+                                                "y": 1,
                                                 "value": 8,
                                                 "category": 0
                                             },
                                             {
-                                                "id": "9",
-                                                "name": "CB OPERATOR",
+                                                "id": characters[9].character_id,
+                                                "name": characters[9].character_name,
                                                 "symbolSize": 9,
-                                                "x": -352,
-                                                "y": 38,
+                                                "x": 1,
+                                                "y": 1,
                                                 "value": 9,
                                                 "category": 0
                                             },
                                             {
-                                                "id": "10",
-                                                "name": "OldMan",
+                                                "id": characters[10].character_id,
+                                                "name": characters[10].character_name,
                                                 "symbolSize": 13,
                                                 "x": -344,
                                                 "y": 45,
@@ -625,8 +622,8 @@
                                                 "category": 1
                                             },
                                             {
-                                                "id": "11",
-                                                "name": "MS. KELLY",
+                                                "id": characters[11].character_id,
+                                                "name": characters[11].character_name,
                                                 "symbolSize": 10,
                                                 "x": -87.93029,
                                                 "y": -68.8120565,
@@ -634,8 +631,8 @@
                                                 "category": 1
                                             },
                                             {
-                                                "id": "12",
-                                                "name": "PRINCIPAL",
+                                                "id": characters[12].character_id,
+                                                "name": characters[12].character_name,
                                                 "symbolSize": 12,
                                                 "x": -3,
                                                 "y": -18,
@@ -643,8 +640,8 @@
                                                 "category": 1
                                             },
                                             {
-                                                "id": "13",
-                                                "name": "RIGGS",
+                                                "id": characters[13].character_id,
+                                                "name": characters[13].character_name,
                                                 "symbolSize": 20,
                                                 "x": -19,
                                                 "y": 178,
@@ -652,8 +649,8 @@
                                                 "category": 1
                                             },
                                             {
-                                                "id": "14",
-                                                "name": "OLD ENGINEER",
+                                                "id": characters[14].character_id,
+                                                "name": characters[14].character_name,
                                                 "symbolSize": 15,
                                                 "x": -158,
                                                 "y": 201,
@@ -661,8 +658,8 @@
                                                 "category": 1
                                             },
                                             {
-                                                "id": "15",
-                                                "name": "DOYLE",
+                                                "id": characters[15].character_id,
+                                                "name": characters[15].character_name,
                                                 "symbolSize": 50,
                                                 "x": -127,
                                                 "y": 242,
@@ -670,8 +667,8 @@
                                                 "category": 5
                                             },
                                             {
-                                                "id": "16",
-                                                "name": "BRAND'S FATHER",
+                                                "id": characters[16].character_id,
+                                                "name": characters[16].character_name,
                                                 "symbolSize": 30,
                                                 "x": -300,
                                                 "y": -39,
@@ -679,8 +676,8 @@
                                                 "category": 3
                                             },
                                             {
-                                                "id": "17",
-                                                "name": "TARS",
+                                                "id": characters[17].character_id,
+                                                "name": characters[17].character_name,
                                                 "symbolSize": 35,
                                                 "x": -510,
                                                 "y": -39,
@@ -688,8 +685,8 @@
                                                 "category": 3
                                             },
                                             {
-                                                "id": "18",
-                                                "name": "BRAND",
+                                                "id": characters[18].character_id,
+                                                "name": characters[18].character_name,
                                                 "symbolSize": 70,
                                                 "x": -46,
                                                 "y": -490,
@@ -697,8 +694,8 @@
                                                 "category": 6
                                             },
                                             {
-                                                "id": "19",
-                                                "name": "CASE",
+                                                "id": characters[19].character_id,
+                                                "name": characters[19].character_name,
                                                 "symbolSize": 35,
                                                 "x": -51.1624,
                                                 "y": -56.9891,
@@ -706,8 +703,8 @@
                                                 "category": 4
                                             },
                                             {
-                                                "id": "20",
-                                                "name": "ROTH",
+                                                "id": characters[20].character_id,
+                                                "name": characters[20].character_name,
                                                 "symbolSize": 45,
                                                 "x": 48.12122,
                                                 "y": -44.5048,
@@ -715,8 +712,8 @@
                                                 "category": 4
                                             },
                                             {
-                                                "id": "21",
-                                                "name": "CHINESE OFFICER",
+                                                "id": characters[21].character_id,
+                                                "name": characters[21].character_name,
                                                 "symbolSize": 22,
                                                 "x": 356.44113,
                                                 "y": -42.13303,
@@ -724,8 +721,8 @@
                                                 "category": 1
                                             },
                                             {
-                                                "id": "22",
-                                                "name": "LIU",
+                                                "id": characters[22].character_id,
+                                                "name": characters[22].character_name,
                                                 "symbolSize": 26,
                                                 "x": -9.1107,
                                                 "y": -32.5133,
@@ -733,8 +730,8 @@
                                                 "category": 2
                                             },
                                             {
-                                                "id": "23",
-                                                "name": "FARMER",
+                                                "id": characters[23].character_id,
+                                                "name": characters[23].character_name,
                                                 "symbolSize": 24,
                                                 "x": -31.42786,
                                                 "y": -9.44803,
@@ -742,8 +739,8 @@
                                                 "category": 1
                                             },
                                             {
-                                                "id": "24",
-                                                "name": "EMILY COOPER",
+                                                "id": characters[24].character_id,
+                                                "name": characters[24].character_name,
                                                 "symbolSize": 27.5,
                                                 "x": 4.6313396,
                                                 "y": -273.8517,
@@ -751,8 +748,8 @@
                                                 "category": 2
                                             },
                                             {
-                                                "id": "25",
-                                                "name": "MURPH'S WIFE",
+                                                "id": characters[25].character_id,
+                                                "name": characters[25].character_name,
                                                 "symbolSize": 24,
                                                 "x": 82.80825,
                                                 "y": -20.1144,
@@ -760,8 +757,8 @@
                                                 "category": 2
                                             },
                                             {
-                                                "id": "26",
-                                                "name": "WIFE",
+                                                "id": characters[26].character_id,
+                                                "name": characters[26].character_name,
                                                 "symbolSize": 24,
                                                 "x": 78.64646,
                                                 "y": -31.512747,
@@ -769,8 +766,8 @@
                                                 "category": 2
                                             },
                                             {
-                                                "id": "27",
-                                                "name": "ADMINISTRATOR",
+                                                "id": characters[27].character_id,
+                                                "name": characters[27].character_name,
                                                 "symbolSize": 24,
                                                 "x": -81.46074,
                                                 "y": -20.20204,
@@ -778,8 +775,8 @@
                                                 "category": 2
                                             },
                                             {
-                                                "id": "28",
-                                                "name": "DOCTOR",
+                                                "id": characters[28].character_id,
+                                                "name": characters[28].character_name,
                                                 "symbolSize": 24,
                                                 "x": -25.73984,
                                                 "y": 82.41631,
@@ -1392,147 +1389,10 @@
                                 <script>
                                     var myCharts = echarts.init(document.getElementById('scene'));
                                     var datas = [
-                                        { year: 'Scene_1', value: 0, id: 0, itemStyle: { opacity: 0 } },
-                                        { year: 'Scene_2', value: 0, id: 1, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_3', value: 0, id: 2, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_4', value: 0, id: 3, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_5', value: 0, id: 4, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_6', value: 0, id: 5, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_7', value: 0, id: 6, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_8', value: 0, id: 7, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_9', value: 0, id: 8, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_10', value: 0, id: 9, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_11', value: 0, id: 10, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_12', value: 0, id: 11, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_13', value: 0, id: 12, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_14', value: 0, id: 13, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_15', value: 0, id: 14, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_16', value: 0, id: 15, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_17', value: 0, id: 16, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_18', value: 0, id: 17, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_19', value: 0, id: 18, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_20', value: 0, id: 19, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_21', value: 0, id: 20, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_22', value: 0, id: 21, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_23', value: 0, id: 22, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_24', value: 0, id: 23, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_25', value: 0, id: 24, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_26', value: 0, id: 25, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_27', value: 0, id: 26, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_28', value: 0, id: 27, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_29', value: 0, id: 28, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_30', value: 0, id: 29, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_31', value: 0, id: 30, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_32', value: 0, id: 31, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_33', value: 0, id: 32, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_34', value: 0, id: 33, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_35', value: 0, id: 34, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_36', value: 0, id: 35, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_37', value: 0, id: 36, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_38', value: 0, id: 37, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_39', value: 0, id: 38, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_40', value: 0, id: 39, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_41', value: 0, id: 40, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_42', value: 0, id: 41, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_43', value: 0, id: 42, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_44', value: 0, id: 43, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_45', value: 0, id: 44, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_46', value: 0, id: 45, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_47', value: 0, id: 46, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_48', value: 0, id: 47, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_49', value: 0, id: 48, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_50', value: 0, id: 49, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_51', value: 0, id: 50, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_52', value: 0, id: 51, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_53', value: 0, id: 52, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_54', value: 0, id: 53, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_55', value: 0, id: 54, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_56', value: 0, id: 55, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_57', value: 0, id: 56, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_58', value: 0, id: 57, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_59', value: 0, id: 58, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_60', value: 0, id: 59, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_61', value: 0, id: 60, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_62', value: 0, id: 61, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_63', value: 0, id: 62, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_64', value: 0, id: 63, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_65', value: 0, id: 64, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_66', value: 0, id: 65, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_67', value: 0, id: 66, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_68', value: 0, id: 67, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_69', value: 0, id: 68, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_70', value: 0, id: 69, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_71', value: 0, id: 70, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_72', value: 0, id: 71, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_73', value: 0, id: 72, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_74', value: 0, id: 73, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_75', value: 0, id: 74, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_76', value: 0, id: 75, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_77', value: 0, id: 76, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_78', value: 0, id: 77, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_79', value: 0, id: 78, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_80', value: 0, id: 79, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_81', value: 0, id: 80, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_82', value: 0, id: 81, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_83', value: 0, id: 82, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_84', value: 0, id: 83, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_85', value: 0, id: 84, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_86', value: 0, id: 85, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_87', value: 0, id: 86, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_88', value: 0, id: 87, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_89', value: 0, id: 88, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_90', value: 0, id: 89, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_91', value: 0, id: 90, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_92', value: 0, id: 91, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_93', value: 0, id: 92, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_94', value: 0, id: 93, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_95', value: 0, id: 94, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_96', value: 0, id: 95, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_97', value: 0, id: 96, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_98', value: 0, id: 97, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_99', value: 0, id: 98, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_100', value: 0, id: 99, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_101', value: 0, id: 100, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_102', value: 0, id: 101, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_103', value: 0, id: 102, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_104', value: 0, id: 103, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_105', value: 0, id: 104, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_106', value: 0, id: 105, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_107', value: 0, id: 106, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_108', value: 0, id: 107, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_109', value: 0, id: 108, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_110', value: 0, id: 109, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_111', value: 0, id: 110, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_112', value: 0, id: 111, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_113', value: 0, id: 112, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_114', value: 0, id: 113, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_115', value: 0, id: 114, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_116', value: 0, id: 115, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_117', value: 0, id: 116, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_118', value: 0, id: 117, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_119', value: 0, id: 118, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_120', value: 0, id: 119, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_121', value: 0, id: 120, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_122', value: 0, id: 121, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_123', value: 0, id: 122, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_124', value: 0, id: 123, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_125', value: 0, id: 124, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_126', value: 0, id: 125, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_127', value: 0, id: 126, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_128', value: 0, id: 127, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_129', value: 0, id: 128, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_130', value: 0, id: 129, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_131', value: 0, id: 130, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_132', value: 0, id: 131, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_133', value: 0, id: 132, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_134', value: 0, id: 133, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_135', value: 0, id: 134, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_136', value: 0, id: 135, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_137', value: 0, id: 136, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_138', value: 0, id: 137, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_139', value: 0, id: 138, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_140', value: 0, id: 139, itemStyle: { opacity: 1 } },
-                                        { year: 'Scene_141', value: 0, id: 140, itemStyle: { opacity: 1 } }
+                                    {% for scene in scenes %}
+                                        { year: '{{ scene.scene_id }}', value: 0, id: {{ forloop.counter0}}, itemStyle: { opacity: 1 } },
+                                    {% endfor %}
+                                    
                                     ];
                                     var options = {
                                         xAxis: {
@@ -1676,37 +1536,13 @@
                                     let old_id = -1;
                                     var option_original = myCharts.getOption();
                                     var bool_click = true;
-                                    var nodeId = [
-                                        [3, 4],
-                                        [3, 4],
-                                        [4, 5, 7, 8, 10, 12, 14, 16, 17, 22, 23, 29, 30, 31, 32, 33, 35, 39, 41, 42, 43, 46, 48, 52, 56, 57, 58, 66, 68, 69, 71, 72, 78, 79, 80, 82, 83, 84, 85, 87, 88, 92, 93, 95, 96, 97, 98, 99, 104, 105, 106, 108, 110, 115, 117, 119, 120, 121, 129, 136, 139, 141],
-                                        [4],
-                                        [4, 7, 11, 12, 56, 114],
-                                        [4, 7, 12, 17, 22, 23, 30, 31, 32, 41, 114, 125, 129, 129, 130],
-                                        [4, 5, 17, 39, 56],
-                                        [4],
-                                        [4],
-                                        [12],
-                                        [29],
-                                        [12],
-                                        [12],
-                                        [15, 16],
-                                        [31],
-                                        [31, 42, 46, 52, 66, 68, 77, 79, 80, 84, 85, 92, 95, 97, 99, 105, 106, 108, 116, 117, 119, 121],
-                                        [31, 31, 32, 33, 33, 35, 43, 46, 46, 48, 57, 58, 66, 68, 69, 71, 72, 76, 77, 78, 79, 80, 82, 83, 84, 87, 88, 90, 92, 93, 95, 96, 97, 99, 104, 106, 108, 110, 113, 113, 114, 115, 117, 119, 120, 121],
-                                        [31, 32, 42, 46, 52, 56, 57, 64, 119, 121],
-                                        [31, 31, 32, 33, 33, 35, 43, 46, 46, 48, 57, 58, 66, 68, 69, 71, 72, 76, 77, 78, 79, 80, 82, 83, 84, 87, 88, 90, 92, 93, 95, 96, 97, 99, 104, 106, 108, 110, 113, 113, 114, 115, 117, 119, 120, 121],
-                                        [33, 46, 58, 60, 66, 68, 69, 76, 78, 79, 95, 96, 105],
-                                        [46, 66, 68, 69, 71, 77, 79, 80, 82, 84, 85, 92, 93, 95, 96, 97, 98, 99],
-                                        [96],
-                                        [96, 106],
-                                        [125],
-                                        [129, 130],
-                                        [114, 125, 129, 129, 130],
-                                        [129],
-                                        [136],
-                                        [136]
-                                    ];
+                                    var nodeId = [];
+                                    for (var i = 0; i < characters.length; i++) {
+                                        var sceneNumbers = characters[i].character_scene.match(/\d+/g);
+                                        var sceneArray = sceneNumbers ? sceneNumbers.map(Number) : [];
+                                        nodeId.push(sceneArray);
+                                    }
+                                    console.log(nodeId)
                                     myChart.on('click', function (params) {
                                         bool_click = true;
                                         myCharts.setOption(option_original);
@@ -2158,874 +1994,38 @@
                                 </div>
                             </div>
 
+                            <script>
+                                function flipBox(counter) {
+                                    var container = document.querySelector('.comment_container');
+                                    var specificContainer = document.querySelector('.comment_container' + counter);
+                                    specificContainer.classList.toggle('flipped');
+                                }
+                            </script>
+
                             <div class="card"
                                 style="margin-left:-50px;margin-top: -30px;width: 140%;max-height:43.7rem;background-color:rgba(255, 255, 255, 0.05);border: 1px solid rgba(255, 255, 255, 0.5);">
                                 <div class="comment_container_div"
                                     style="overflow-y: scroll;width: 105%; max-height: 43.7rem; ;padding-top: 10px;">
 
-                                    <div class="comment_container1">
-                                        <div class="comment_box" onclick="flipBox1()">
-                                            <div class="comment_front"
-                                                style="background-color:rgba(0, 0, 0, 0) ;height: 200px;">
+                                    {% for comment in comments %}
+                                    <div class="comment_container comment_container{{ forloop.counter }}">
+                                        <div class="comment_box" onclick="flipBox({{ forloop.counter }})">
+                                            <div class="comment_front" style="background-color: rgba(0, 0, 0, 0); height: 200px;">
                                                 <!-- 正面内容 -->
-                                                <p class="comment_title">评论一</p>
-                                                <p class="comment_time">时间: 4 November 2014</p>
-                                                <p class="comment_author">作者: Paul Greenwood</p>
+                                                <p class="comment_title">评论 {{ forloop.counter }}</p>
+                                                <p class="comment_time">时间: {{ comment.comment_time }}</p>
+                                                <p class="comment_author">作者: {{ comment.commentator }}</p>
                                             </div>
-                                            <div class="comment_back"
-                                                style="background-color:rgba(0, 0, 0, 0) ;height: 200px;">
+                                            <div class="comment_back" style="background-color: rgba(0, 0, 0, 0); height: 200px;">
                                                 <!-- 背面内容 -->
-                                                <p style=" height: 200px;">There are very
-                                                    few directors out there who would be given a budget the size of
-                                                    <span id="movie">Interstellar</span>’s for a non-franchise or
-                                                    non-adaptation movie. But very few directors are <span
-                                                        id="director"><span id="director"><span
-                                                                id="director">Nolan</span></span> <span
-                                                            id="director">Nolan</span></span>, and this is 2014’s most
-                                                    anticipated movie, and has been since it was first
-                                                    announced.<br><br>It’s also been a fine year for Matthew
-                                                    McConaughey, and he caps it with the lead in this vastly ambitious
-                                                    sci-fi epic that’s two parts magnificence to one part frustration.
-                                                    He plays <span id="character">Cooper</span>, a one-time pilot who is
-                                                    now a farmer, as are many people since a crop blight led to a world
-                                                    food shortage and turned many parts into a dustbowl.<br><br>But life
-                                                    has to go on in this near-future world for <span
-                                                        id="character">Cooper</span> and his son and daughter. He’s all
-                                                    about the pioneer spirit, living in a world where he’s no longer
-                                                    able to use his skills, until he encounters a team of scientists led
-                                                    by Professor Brand and his daughter Amelia (Michael Caine and Anne
-                                                    Hathaway), They have a plan to leave earth in order to find new
-                                                    inhabitable worlds since, as Brand puts it, “mankind was born on
-                                                    earth, it wasn’t meant to die here”.<br><br><br>This sends <span
-                                                        id="character">Cooper</span>, Amelia and another pair of
-                                                    astronauts on a two-year journey to a wormhole that’s been
-                                                    discovered near Saturn, and to whatever lies beyond that. That’s all
-                                                    you really need to know, because from this point in there are many
-                                                    thrills and surprises to be discovered in a film that’s all about
-                                                    what we leave behind for future generations. There are echoes of
-                                                    2001 in its silent, balletic space sequences, as well as in some of
-                                                    the more surreal imagery that <span id="director">Nolan</span>
-                                                    unleashes in the later stages.<br><br>A lot of the time it’s hard
-                                                    science, as actual rocket scientists come up with plans for how to
-                                                    save mankind. Questions of relative time may scramble the brain, but
-                                                    it’s done with the utmost sincerity and not without humour, which is
-                                                    a welcome touch. It’s not an action film, certainly not a
-                                                    single-minded one like Gravity, so that shouldn’t be expected, but
-                                                    when <span id="director">Nolan</span> does throw some in, he runs
-                                                    with ideas and visuals that make for jaw-dropping
-                                                    sequences.<br><br>For all its spectacle though, it’s the immense
-                                                    force of the human drama that gives <span
-                                                        id="movie">Interstellar</span> its impact. The implications and
-                                                    the scale of what we’re dealing with here can be difficult to
-                                                    contemplate, and when it concentrates on its profound examination of
-                                                    humanity, it approaches brilliance.<br><br><br>In most regards, this
-                                                    is exactly what we should be demanding from our blockbusters. It’s
-                                                    conceived with intelligence and far-reaching intent and executed
-                                                    with immense skill, yet it never quite achieves that moment of
-                                                    transcendence that it seems to threaten for the first two
-                                                    hours.<br><br>There’s plenty of room for trimming in its much too
-                                                    generous running time, and <span id="director">Nolan</span> throws
-                                                    into the mix the kinds of characters and plot developments you might
-                                                    expect from lesser filmmakers, undoing a lot of good work in a final
-                                                    hour that at times can be sluggish and ponderous.<br><br>So the
-                                                    year’s most anticipated film has turned out to be a good one, at
-                                                    times a very good one. But in the end does it really amount to much
-                                                    more than you might find in the very best episodes of Star
-                                                    Trek?<br><br>
-
-                                                </p>
+                                                <p style="height: 200px;">{{ comment.comment_content|safe}}</p>
                                             </div>
                                         </div>
-
                                     </div>
-
-                                    <div class="comment_container2">
-                                        <div class="comment_box" onclick="flipBox2()">
-                                            <div class="comment_front"
-                                                style="background-color:rgba(0, 0, 0, 0) ;height: 200px;">
-                                                <!-- 正面内容 -->
-                                                <p class="comment_title">评论二</p>
-                                                <p class="comment_time">时间: 4 November 2014</p>
-                                                <p class="comment_author">作者: James Berardinelli</p>
-                                            </div>
-                                            <div class="comment_back"
-                                                style="background-color:rgba(0, 0, 0, 0) ;height: 200px;">
-                                                <!-- 背面内容 -->
-                                                <p style=" height: 200px;"><span id="director"><span
-                                                            id="director">Christopher</span> <span
-                                                            id="director">Nolan</span></span> has never shied away from
-                                                    a challenge and the one he has taken on with <span
-                                                        id="movie">Interstellar</span> may be his most prodigious thus
-                                                    far - bigger than delivering an end-to-start chronology in Memento,
-                                                    more impressive than the mind-bending contortions of Inception, and
-                                                    more daunting than re-imagining Batman into the most unique
-                                                    superhero franchise of the 21st century. <span
-                                                        id="movie">Interstellar</span> is simultaneously a big-budget
-                                                    science fiction endeavor and a very simple tale of love and
-                                                    sacrifice. It is by turns edgy, breathtaking, hopeful, and
-                                                    heartbreaking. It's an amazing achievement that deserves to be seen
-                                                    on the biggest screen with the best sound system possible. <span
-                                                        id="director">Nolan</span> has crafted <span
-                                                        id="movie">Interstellar</span> as a movie theater experience.
-                                                    Watching it at home, no matter how good the sound system is, won't
-                                                    match. This is one time when the IMAX surcharge is worth
-                                                    it.<br><br><span id="movie">Interstellar</span> is science fiction.
-                                                    It's not space opera. It's not futuristic fantasy. It's what the
-                                                    term "science fiction" was coined to represent. It presents a viable
-                                                    future in which space travel, while possible, is dangerous and
-                                                    uncertain. Starships aren't zipping from planet to planet. Space
-                                                    craft aren't firing lasers, phasers, or photon torpedoes. Travel
-                                                    across long distances uses the dangerous and unpredictable method of
-                                                    entering a wormhole, not engaging Warp One or making the jump to
-                                                    hyperspace. Time dilation comes into effect in the presence of a
-                                                    black hole and there's even a little bit about the relationship
-                                                    between quantum mechanics and relativity. This isn't Star Wars, Star
-                                                    Trek, or Guardians of the Galaxy, and anyone who approaches it with
-                                                    such expectations will be disappointed. It's more along the lines of
-                                                    recent movies like Contact (which also starred Matthew McConaughey)
-                                                    and Gravity in that it acknowledges science rather than ignoring the
-                                                    rules of reality as we understand them.<br><br>It will be difficult
-                                                    to find a review of <span id="movie">Interstellar</span> that
-                                                    doesn't reference 2001: A Space Odyssey and there's a valid reason
-                                                    for that. <span id="director">Nolan</span> at times uses Stanley
-                                                    Kubrick's masterpiece as a template, especially during moments of
-                                                    grandeur. Hans Zimmer's score is no less crucial to <span
-                                                        id="movie">Interstellar</span> than "Also Sprach Zarathustra"
-                                                    was to 2001. Yet, this is no mere copy of Kubrick's film; in fact,
-                                                    it goes far afield. There's heroism, a la The Right Stuff. It's also
-                                                    a warmer, more emotional experience - less stately and abstruse. In
-                                                    fact, found at the core of this big budget adventure is the most
-                                                    relatable thing imaginable: the feelings of love and trust that bind
-                                                    father and daughter. It's almost a fusion of Kubrick and
-                                                    Spielberg.<br><br><span id="movie">Interstellar</span> opens at an
-                                                    unspecified future date in America's farm belt. Although the film is
-                                                    careful not to identify a year, it's probably around 2050. The world
-                                                    has fallen victim to famine caused by overpopulation and a blight
-                                                    that is killing crops and creating massive dust storms. With
-                                                    nitrogen on the rise in the atmosphere, total asphyxiation is the
-                                                    inevitable endgame. Earth as a bastion of humanity is doomed. Former
-                                                    NASA engineer and test pilot <span id="character">Cooper</span>
-                                                    (Matthew McConaughey) owns acres of corn that he farms along with
-                                                    his family: son Tom, daughter <span id="character">Murph</span>
-                                                    (Mackenzie Foy), and father-in-law Donald (John Lithgow). Drawn by
-                                                    almost supernatural means to a chain-link fence around a
-                                                    super-secret location, <span id="character">Cooper</span> finds
-                                                    himself face-to-face with what remains of his former employer: an
-                                                    underground think-tank dedicated to saving the human race. Led by
-                                                    Professor Brand (Michael Caine), NASA has developed two plans. The
-                                                    first involves creating a massive space vehicle to transport as many
-                                                    humans as possible into outer space. The second involves using
-                                                    frozen embryos to colonize a distant world. There are problems with
-                                                    Plan A - namely, overcoming gravity to launch the massive space ship
-                                                    - but Brand is convinced he can solve the necessary equations that
-                                                    will make this possible.<br><br><span id="character">Cooper</span>
-                                                    learns that a wormhole has appeared in space near Saturn, presumably
-                                                    placed there by (alien) entities of great intelligence intent upon
-                                                    giving humanity a path of survival. Ten years ago, astronauts were
-                                                    sent through to scout the dozen potentially habitable planets on the
-                                                    other side. Now another craft must make the journey to determine
-                                                    humankind's final destination. Mindful that his children's future is
-                                                    at stake, <span id="character">Cooper</span> agrees to pilot the
-                                                    craft. He is accompanied by a small crew of four: Brand's daughter,
-                                                    Amelia (Anne Hathaway); scientists Doyle (Wes Bentley) and Romilly
-                                                    (David Gyasi); and the sardonic robot TARS (Bill Irwin), who recalls
-                                                    HAL 9000. <span id="character">Murph</span> is resentful of her
-                                                    father for abandoning her - an anger she nurses into adulthood, when
-                                                    (now played by Jessica Chastain), she becomes Brand's
-                                                    second-in-charge working for the same entity that took her father
-                                                    away from her.<br><br>Like Contact, <span
-                                                        id="movie">Interstellar</span> displays an uncanny knack for
-                                                    making complex physics accessible to laymen (partial credit to
-                                                    Executive Producer and CalTech physicist Kip Thorne). Yes, there are
-                                                    times when the dialogue is dense but it never becomes impenetrable
-                                                    (although there are some odd passages, such as one in which <span
-                                                        id="character">Cooper</span> and Amelia discuss the meaning of
-                                                    "love"). Does the movie occasionally fudge? Of course, but it sticks
-                                                    closer to Einstein's laws than most space-faring movies and when it
-                                                    speculates, it does so in a believable manner.<br><br>The movie
-                                                    remains Earthbound for its first 45 minutes, establishing a dire
-                                                    scenario for the planet and depicting the day-to-day struggles of
-                                                    those who survive in this blasted, inhospitable future. Most
-                                                    importantly, however, this part of the film establishes the
-                                                    closeness of the relationship between <span
-                                                        id="character">Cooper</span> and <span
-                                                        id="character">Murph</span> and introduces the mystery of "them"
-                                                    - the mysterious "ghosts" who will play a part on the periphery for
-                                                    the rest of the movie. In the end, <span
-                                                        id="character">Cooper</span> must embrace the philosophy that
-                                                    "the needs of the many outweigh the needs of the few." He promises
-                                                    to <span id="character">Murph</span> that he will return, knowing he
-                                                    may not be able to keep that promise.<br><br>Once in space, the
-                                                    white knuckle moments begin. Limiting the use of CGI, <span
-                                                        id="director">Nolan</span> relies on practical effects to craft
-                                                    a movie that feels more like a real journey than a video game. There
-                                                    are some tremendous action set pieces and the narrative is
-                                                    wonderfully unpredictable. The movie takes some chances with its
-                                                    endgame, which resolves a lot of plot points but at times seems
-                                                    rushed. <span id="movie">Interstellar</span> is at its most complex
-                                                    during its final 20 minutes and even those who pay rapt attention
-                                                    may leave the theater with some unanswered questions.<br><br>The
-                                                    film is nearly three hours but there's enough story here for
-                                                    something a lot longer. In condensing it, <span
-                                                        id="director">Nolan</span> has made something 169 minutes in
-                                                    length that breezes by faster than many productions half its length.
-                                                    He accomplishes this by establishing a blistering pace during <span
-                                                        id="movie">Interstellar</span>'s meatier sections, including
-                                                    expert cross-cutting between Earth and space during a powerful "fire
-                                                    and ice" sequence.<br><br>Visually, <span
-                                                        id="movie">Interstellar</span> looks great. <span
-                                                        id="director">Nolan</span> understands all the facets of special
-                                                    effects technology (except, perhaps, old age makeup) and uses them
-                                                    to their best. Hans Zimmer delivers an operatic score that, although
-                                                    occasionally drowning out dialogue (more a mixing issue than a
-                                                    scoring one), adds to the overall experience. Sound is important to
-                                                    <span id="movie">Interstellar</span> - when the rocket lifts off
-                                                    around the 45-minute mark, the bass shakes the entire
-                                                    theater.<br><br>It has been a tremendous year for McConaughey. From
-                                                    Dallas Buyers Club to True Detective to <span
-                                                        id="movie">Interstellar</span>, he has won a Golden Globe and an
-                                                    Oscar and been nominated for an Emmy. <span
-                                                        id="movie">Interstellar</span> will give him another opportunity
-                                                    for Academy recognition: he's the glue that holds everything
-                                                    together. He's the human factor in a vast universe. His love for his
-                                                    daughter and his pain when he acknowledges her despair invests this
-                                                    movie with a warmth and feeling that no previous <span
-                                                        id="director">Nolan</span> movie can boast. The supporting cast,
-                                                    which includes Anne Hathaway, Jessica Chastain, and Michael Caine,
-                                                    is strong, but McConaughey represents the heart and soul of <span
-                                                        id="movie">Interstellar</span>.<br><br>For those who appreciate
-                                                    the Mobius strip approach <span id="director">Nolan</span> is known
-                                                    for, <span id="movie">Interstellar</span> offers a little of that.
-                                                    There are some twists and non-chronological jumps, although not so
-                                                    many that the story becomes confusing or unintelligible. Time
-                                                    dilation (the slowing down of time for those in close proximity to a
-                                                    dense gravitational source) isn't just a convenient plot device;
-                                                    it's an integral element of the narrative. Like nearly everything
-                                                    else in <span id="movie">Interstellar</span>, it is used
-                                                    effectively.<br><br>For anyone with a hunger for real science
-                                                    fiction rather than the crowd-pleasing, watered-down version
-                                                    Hollywood typically offers (and that I often enjoy immensely), <span
-                                                        id="movie">Interstellar</span> is a satisfying entrée. I'd rank
-                                                    this alongside Memento and The Dark Knight as the best <span
-                                                        id="director">Nolan</span> has done, and it's an immediate
-                                                    contender for one of 2014's best. The film deserves the label of an
-                                                    "experience" and the bigger the venue, the more immersive it will
-                                                    be. As event movies go, this is one of the most unique and
-                                                    mesmerizing.
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                                    <div class="comment_container3">
-                                        <div class="comment_box" onclick="flipBox3()">
-                                            <div class="comment_front"
-                                                style="background-color:rgba(0, 0, 0, 0) ;height: 200px;">
-                                                <!-- 正面内容 -->
-                                                <p class="comment_title">评论三</p>
-                                                <p class="comment_time">时间: 5 NOVEMBER 2014</p>
-                                                <p class="comment_author">作者: PETER TRAVERS</p>
-                                            </div>
-                                            <div class="comment_back"
-                                                style="background-color:rgba(0, 0, 0, 0) ;height: 200px;">
-                                                <!-- 背面内容 -->
-                                                <p style=" height: 200px;"><span id="director"><span
-                                                            id="director">Christopher</span> <span
-                                                            id="director">Nolan</span></span> is, by almost any
-                                                    standard, a monumental figure in the landscape of contemporary
-                                                    cinema. He has enjoyed a near-unblemished track record of massive
-                                                    box-office success for going on a decade. He has remained committed
-                                                    to shooting on film in the face of an almost industrywide shift
-                                                    towards digital, which he has been a most reasonable voice in
-                                                    opposition to, and he has used his pull to make sure that cinemas
-                                                    equipped to project his latest, <span
-                                                        id="movie">Interstellar</span>, in either 35 or 70mm, will get
-                                                    first dibs on playing it for a paying audience. As the blockbuster
-                                                    has become increasingly formulaic, made-by-committee, and dependent
-                                                    on tie-in world-building – see for example Marvel Films’ recent
-                                                    unveiling of their release strategy for the next several lifetimes –
-                                                    <span id="director">Nolan</span>, after his three Batman films, has
-                                                    evinced an interest in making big movies that are self-contained,
-                                                    freestanding edifices, bearing a personal imprint.<br>All of this
-                                                    is, on paper at least, to the good. So it is without great relish
-                                                    that I must report that <span id="movie">Interstellar</span>, like
-                                                    Inception before it, is a movie that feels like being tangled up in
-                                                    a pile of infinitely-unfolding some-assembly-required instructions
-                                                    in the watching, full of dialogue that’s like the recital of a How
-                                                    To manual.<br><br>As in Inception, there is a lot of
-                                                    explaining-what-is-going-on-right-now-at-great-length in <span
-                                                        id="movie">Interstellar</span>, though happily this time most of
-                                                    the exposition comes from Matthew McConaughey and Anne Hathaway at
-                                                    their most appealing, rather than from Leo DiCaprio in the dregs of
-                                                    his bottomless-anguish phase. The movie gives McConaughey at least
-                                                    one knockout, Oscar-reel scene, though the premise behind it is so
-                                                    intrinsically moving that it would almost be impossible to
-                                                    fudge.<br><br>Leading a desperate, last-ditch-attempt mission to
-                                                    find a new, habitable home for the residents of a fatally-blighted
-                                                    earth, McConaughey’s space pilot <span id="character">Cooper</span>
-                                                    (as in Gary) and Hathaway’s scientist Amelia (as in Earhart) Brand
-                                                    touch down on a candidate planet where, for every hour they spend on
-                                                    the surface, seven years will have passed in earth time. Returning
-                                                    in their landing craft a few hours later to dock in the orbiting
-                                                    space station – it looks like a lazily-revolving sprinkler spigot –
-                                                    <span id="character">Cooper</span> catches up on his video messages
-                                                    from earth from the son and a daughter, Tom and <span
-                                                        id="character">Murph</span>y, who he left behind as children,
-                                                    and who’ve now grown to become his near-contemporaries. (They’ve
-                                                    aged into Casey Affleck and Jessica Chastain,
-                                                    respectively.)<br><br>McConaughey’s emotional dam burst at this
-                                                    moment is ragged and startling, and for this moment, at least, <span
-                                                        id="director">Nolan</span> realises his movie’s evident ambition
-                                                    – to create a work at once intimate and cosmic in scope, in which
-                                                    the fate of humanity depends on what happens in one little girl’s
-                                                    bedroom, and the survival of the family of man hinges on one man’s
-                                                    family. When <span id="character">Cooper</span> first decides to
-                                                    take on the mission which may very well separate him from his
-                                                    children forever, the roar of his Dodge Ram pickup blasting down the
-                                                    gravel driveway matches to the sound of his shuttle taking off –
-                                                    leaving earth is almost an afterthought after leaving
-                                                    home.<br><br>In <span id="movie">Interstellar</span>, the business
-                                                    of saving humanity is very much a local matter. <span
-                                                        id="character">Cooper</span> and <span
-                                                        id="character">Murph</span>y’s pained parting begins when
-                                                    inexplicable forces lead ex-astronaut-next-door <span
-                                                        id="character">Cooper</span> to the headquarters of NASA,
-                                                    seemingly just a couple of counties over. Until <span
-                                                        id="character">Cooper</span> takes leave of his home planet,
-                                                    presenting the opportunity for an orbital perspective, the movie
-                                                    shows us nothing more of that planet than a John Cougar
-                                                    Mellencamp-esque version of the American heartland, Smallville in
-                                                    extremis. This is all that remains after a mass depopulation in the
-                                                    wake of a crop blight which affected every staple but corn, which
-                                                    has forced America (and presumably whatever is left of the rest of
-                                                    the planet) to dedicate itself completely to agrarian pursuits.
-                                                    Nothing is heard of the wider world, or even the big cities of the
-                                                    United States – though we do see the New York Yankees, reduced to a
-                                                    barnstorming team playing Little League-sized ballfields.<br><br>The
-                                                    mood is very much loss-of-national-purpose-and-resolve, faded
-                                                    stars-and-stripes downbeat in the key of Merle Haggard’s Are the
-                                                    Good Times Really Over, with McConaughey kicking back on his porch
-                                                    and musing “It’s like we’ve forgotten who we are: explorers,
-                                                    pioneers, not caretakers.” Even the school textbooks actively
-                                                    discourage big dreams now, teaching that the moon landing was faked
-                                                    to bankrupt the Soviet Union. It’s a cheap, baldfaced appeal to a
-                                                    battered sense of American pride that belies the movie’s cerebral
-                                                    pretensions, and when the head of the exiled NASA, one Dr. Brand
-                                                    (Michael Caine) – Amelia’s father, as it happens – tells
-                                                    long-earthbound space cowboy <span id="character">Cooper</span> “I
-                                                    can’t tell you any more unless you agree to pilot this craft,” it
-                                                    feels closer to Michael Bay’s Armageddon than to a certain movie in
-                                                    the Kubrick catalogue.<br><span id="movie">Interstellar</span> can
-                                                    do awesome, as you’d hope a film that commanded the resources of two
-                                                    major studios (Paramount and Warner Bros.) should. The movie, which
-                                                    I saw as it was meant to be seen, on a three-storey IMAX screen, is
-                                                    striated with images conveying sheer vastness: <span
-                                                        id="character">Cooper</span>’s family farm a lone beacon in the
-                                                    country night, devastating dust storms and tidal waves approaching
-                                                    on the horizon, <span id="character">Cooper</span>’s craft dwarfed
-                                                    in passing near the rings of Saturn. There is a marvellous set piece
-                                                    that begins with a flailing fight for the future of humanity on the
-                                                    stark surface of a distant, dead planet – something like the end of
-                                                    Von Stroheim’s Greed in spacesuits – and ends with <span
-                                                        id="character">Cooper</span> docking his landing craft to a
-                                                    spinning-out-of-control station which ranks as the single greatest
-                                                    accomplishment of <span id="director">Nolan</span> in his
-                                                    master-engineer mode.<br><br>As spectacle, <span
-                                                        id="movie">Interstellar</span> is a fitful success. <span
-                                                        id="director">Nolan</span>, however, isn’t content with Ooohs
-                                                    and Ahhhs. Pursuing a passion for involuted chronology which dates
-                                                    to early efforts with longtime co-screenwriter brother Jonathan like
-                                                    Following (1998) and Memento (2000), their <span
-                                                        id="movie">Interstellar</span> is contorted around various
-                                                    temporal shifts. Early on we’re shown talking head interviews with
-                                                    elderly eyewitnesses who are evidently survivors of the earth’s
-                                                    death, speaking of the present in which the film opens as a distant
-                                                    past, and thus giving the movie a long-view perspective, actively
-                                                    nullifying any suspense as to the question of humanity’s chances of
-                                                    enduring. Later, when <span id="character">Cooper</span> stumbles
-                                                    onto a line of communication which allows him to deliver messages to
-                                                    earth across time and space, <span id="director">Nolan</span> comes
-                                                    very near to the territory of Inception, using state-of-the-art
-                                                    special effects – here a mise-en-abyme pseudo-Borgesian library – to
-                                                    create visual corollaries to the birth of inspiration. The climax, I
-                                                    fear, requires Chastain to hoot “Eureka!”<br><br>What can you say
-                                                    about an artist who, when seeking to celebrate revelatory vision and
-                                                    the indomitability of the human spirit, goes about doing so almost
-                                                    entirely through cliché? Caine’s Dr. Brand giving a hoary recital of
-                                                    Dylan Thomas’s Do Not Go Gentle Into That Good Night provides the
-                                                    movie a sort-of refrain – “Oh Captain! My Captain!” was, of course,
-                                                    already taken. The comic relief is courtesy <span
-                                                        id="character">Cooper</span>’s blocky robot companion TARS,
-                                                    whose wisecracking is dictated by the level of his humour setting.
-                                                    This is seemingly meant as a play on the formulaic nature of
-                                                    screenwriting – the executive request to “Dial up the comedy a
-                                                    little” – but the self-aware acknowledgement doesn’t make it any
-                                                    less formulaic, nor does it make the no-fun <span
-                                                        id="director">Nolan</span>s any more adept at lightening the
-                                                    mood.<br><br><br>Where skeptics like myself will cry cliché, <span
-                                                        id="director">Nolan</span>’s partisans will undoubtedly see an
-                                                    artist working in the powerful, primal medium of archetypes. But
-                                                    archetypes need a hard and clear glint, so to be comprehensible at a
-                                                    glance, while <span id="movie">Interstellar</span> proves true to
-                                                    <span id="director">Nolan</span>’s habit of swaddling his movies in
-                                                    layers of exposition and explanation, here effectively dulling the
-                                                    emotional effects of his last act.<br><br>A recent New York Times
-                                                    profile exalted <span id="director">Nolan</span>’s micromanagement,
-                                                    but in practice it makes for rather suffocating storytelling – with
-                                                    the punctilious explanations he has his actors narrate, he’s like an
-                                                    over-solicitous host whose attention keeps you from ever getting
-                                                    comfortable. Consequently, when <span id="character">Cooper</span>,
-                                                    still a fit fortysomething, is reunited with his daughter, now a
-                                                    very old and dying woman, the scene is considerably less persuasive
-                                                    and moving than that between Chris Evans’s unfrozen Captain and
-                                                    Hayley Atwill’s Peggy Carter, his sweetheart from the WWII days, in
-                                                    this year’s Captain America: The Winter Soldier – the very
-                                                    cookie-cutter entertainment that <span id="director"><span
-                                                            id="director">Christopher</span> <span
-                                                            id="director">Nolan</span></span> is supposedly saving us
-                                                    from.<br><br>In a hopeless multiplex present, <span
-                                                        id="director">Nolan</span> has been tasked with the impossible
-                                                    job of leading the way to a better future, providing the legendary
-                                                    ‘blockbuster with brains’. With the year’s umpteenth paean to the
-                                                    nigh-supernatural power of fatherhood, all he’s provided is another
-                                                    harvest of corn.<br><br><br>4、BY PETER TRAVERS NOVEMBER 5, 2014
-                                                    {'neg': 0.087, 'neu': 0.793, 'pos': 0.12, 'compound':
-                                                    0.9933}<br>IT’S DAMN NEAR three hours long. There’s that. Also,
-                                                    <span id="movie">Interstellar</span> is a space odyssey with no
-                                                    UFOs, no blue-skinned creatures from another planet, no alien
-                                                    bursting from the chest of star Matthew McConaughey. It reveals a
-                                                    hopeful side of filmmaker <span id="director"><span
-                                                            id="director">Christopher</span> <span
-                                                            id="director">Nolan</span></span> that will piss off Dark
-                                                    Knight doomsayers. And, hey, didn’t Alfonso Cuarón just win an Oscar
-                                                    for directing Gravity? How long are audiences expected to get high
-                                                    on rocket fumes?<br><br>Blah, blah, blah. Bitch, bitch, bitch. What
-                                                    the neg-heads are missing about <span id="movie">Interstellar</span>
-                                                    is how enthralling it is, how gracefully it blends the cosmic and
-                                                    the intimate, how deftly it explores the infinite in the smallest
-                                                    human details.<br><br>Of course, <span id="director">Nolan</span>
-                                                    has never been the cold technician of his reputation. Watch Memento
-                                                    again, or The Prestige, or the undervalued Insomnia. The sticking
-                                                    point here is that <span id="movie">Interstellar</span> finds <span
-                                                        id="director">Nolan</span> wearing his heart on his sleeve.
-                                                    Nothing like emotion to hold a cool dude up to ridicule. But even
-                                                    when <span id="director">Nolan</span> strains to verbalize feelings,
-                                                    and the script he wrote with his brother Jonathan turns clunky, it’s
-                                                    hard not to root for a visionary who’s reaching for the
-                                                    stars.<br><br>Which brings us to a plot full of deepening surprises
-                                                    I’m not going to spoil. The poster for <span
-                                                        id="movie">Interstellar</span> presents McConaughey surveying a
-                                                    wasteland. It’s meant to be Saturn, but it could just as well be
-                                                    Earth, where environmental recklessness has morphed the planet into
-                                                    a Dirt Bowl starving and choking its citizens.<br><br><span
-                                                        id="director">Nolan</span> spends the first third of the film in
-                                                    the American farm belt of the near future, introducing us to widower
-                                                    <span id="character">Cooper</span> (McConaughey), a former test
-                                                    pilot, who depends on his father-in-law (John Lithgow) to help him
-                                                    raise 15-year-old son Tom (Timothée Chalamet) and 10-year-old
-                                                    daughter <span id="character">Murph</span>y (Mackenzie Foy, superb).
-                                                    Like her dad, <span id="character">Murph</span> is a rebel who
-                                                    refuses to buy into her school’s official dictum that the Apollo
-                                                    space program was a lie.<br><br>It’s when dad and daughter find the
-                                                    remnants of NASA, headed up by <span id="character">Cooper</span>’s
-                                                    old boss Professor Brand (Michael Caine), that the story gains
-                                                    momentum. <span id="character">Cooper</span> heads into space to
-                                                    find a new world to colonize, leaving behind two kids who may never
-                                                    forgive him.<br>The physics lessons (Cal-tech’s Kip Thorne
-                                                    consulted) kick in when Coop captains the Endurance mother ship with
-                                                    a science team made up of Amelia (Anne Hathaway), Brand’s daughter;
-                                                    Romilly (David Gyasi); and Doyle (Wes Bentley). And don’t forget
-                                                    R2-D2 and C-3PO. Not really. The ex-military robots of <span
-                                                        id="movie">Interstellar</span> are called CASE and TARS. The
-                                                    great Bill Irwin voices TARS, a chatty monolith that looks like
-                                                    something out of Stanley Kubrick’s 2001: A Space Odyssey and sounds
-                                                    like that film’s HAL. (Note to viewers: Kubrick’s 1968 landmark and
-                                                    George Lucas’ Star Wars franchise are part of <span
-                                                        id="director">Nolan</span>’s DNA. React
-                                                    accordingly.)<br><br>Next comes the wow factor that makes <span
-                                                        id="movie">Interstellar</span> nirvana for movie lovers. A
-                                                    high-tension docking maneuver. A surprise visitor. A battle on the
-                                                    frozen tundra. A tidal wave the size of a mountain. Cheers to <span
-                                                        id="director">Nolan</span> and his team, led by cinematographer
-                                                    Hoyte Van Hoytema and VFX supervisor Paul J. Franklin (Inception).
-                                                    See <span id="movie">Interstellar</span> in IMAX, with the thrilling
-                                                    images oomphed by Hans Zimmer’s score, and you’ll get the meaning of
-                                                    “rock the house.”<br>And yet it’s the final, quieter hour of <span
-                                                        id="movie">Interstellar</span> that gives the film resonance and
-                                                    lasting value. All the talk of black holes, wormholes and the
-                                                    space-time continuum take root in Coop when he realizes his two
-                                                    years in space have occupied 23 years on Earth. His children, the
-                                                    now-adult Tom (Casey Affleck) and <span id="character">Murph</span>y
-                                                    (Jessica Chastain), spill out decades of joys and resentments in
-                                                    video messages that Coop watches in stunned silence. McConaughey
-                                                    nails every nuance without underlining a single one of them. He’s a
-                                                    virtuoso, his face a road map to the life he’s missed as his
-                                                    children bombard him with a Rorschach test of emotions.<br><br>In
-                                                    case you haven’t noticed, McConaughey is on a roll. And he partners
-                                                    beautifully with the sublime Chastain, who infuses <span
-                                                        id="character">Murph</span> with amazing grit and grace.
-                                                    Familial love is the topic here, not the romantic or sexual kind.
-                                                    How does that figure into space exploration? <span
-                                                        id="director">Nolan</span> gives Hathaway a monologue about it.
-                                                    But dialogue is no match for the flinty eloquence shining from the
-                                                    eyes of McConaughey and Chastain. They are the bruised heart of
-                                                    <span id="movie">Interstellar</span>, a film that trips up only when
-                                                    it tries to make love a science with rules to be applied. In 2001,
-                                                    Kubrick saw a future that was out of our hands. For <span
-                                                        id="director">Nolan</span>, our reliance on one another is all
-                                                    we’ve got. That’s more the stuff of provocation than a Hallmark
-                                                    e-card. <span id="director">Nolan</span> believes it’s better to
-                                                    think through a movie than to just sit through it. If that makes him
-                                                    a white knight, Godspeed.
-                                                    This is big. It’s huge. We don’t make movies like this anymore — we
-                                                    hardly ever did. I’m not talking about big in the sense of budget or
-                                                    even big like epic. We do that plenty: spend the GDP of a small
-                                                    nation to make men in capes fly or monsters stomp or toys sing. I’m
-                                                    talking big when it comes to ideas. Big when it comes to optimism.
-                                                    What passes for science fiction on screens big and small these days
-                                                    is dreary and depressing. Postapocalyptic and apprehensive. We
-                                                    stopped looking out and started looking down, and back, and in. We
-                                                    lost wonder and replaced it with worry.<br><br>This is not what I
-                                                    fell in love with science fiction for.<br><br>Which is why <span
-                                                        id="movie">Interstellar</span> is so thrilling, intellectually
-                                                    and viscerally. It is full of stirring notions of what humanity
-                                                    might be capable of, and follows through with the breathtaking
-                                                    adventure that necessarily follows. Or, well, the adventure that
-                                                    necessarily follows if we chase those possibilities instead of
-                                                    ignoring them. It is full of enormous risk-taking in the quest for
-                                                    something bigger and better for all of us. It is full of hope for
-                                                    humanity. And that is a wonderfully refreshing thing right
-                                                    now.<br><br><span id="movie">Interstellar</span> does have looming
-                                                    apocalypse, yes, but that’s merely the impetus for the adventure. In
-                                                    the near future, we are witnessing a slow collapse of nature, a
-                                                    descent into dusty death for all of planet Earth and all her people
-                                                    (and presumably every other living thing, too). And it’s not only
-                                                    nature but human structures and facilities and culture, too, that
-                                                    are stagnating on their way to the end… but even here, a little bit
-                                                    of wonder and excitement can be rustled up by someone with the
-                                                    inclination for it. Our introduction to <span
-                                                        id="character">Cooper</span> (Matthew McConnaughey: The Wolf of
-                                                    Wall Street, Dallas Buyers Club) comes through a chase he leads his
-                                                    kids on to capture a feral surveillance drone — its solar panels and
-                                                    other technological goodies are invaluable salvage — that is free
-                                                    for the taking since any semblance of mission control collapsed a
-                                                    decade back. Coop ain’t happy to have had to give up his dream work
-                                                    as a pilot and engineer to farm dying land to help feed starving
-                                                    millions, but he is thrilled to be able to use his preferred skills
-                                                    where he can… and salvaging that drone is fun.<br><br>It’s not just
-                                                    movies that stopped looking up and started looking down, and <span
-                                                        id="movie">Interstellar</span> knows this, too. Coop is a lonely
-                                                    would-be adventurer in a world that, like ours, has lost its taste
-                                                    for space exploration. But a few people in a NASA that has been
-                                                    driven underground, literally and figuratively, are maintaining the
-                                                    dream, including mathematician Brand (Michael Caine: Now You See Me,
-                                                    The Dark Knight Rises) and his scientist daughter, Amelia (Anne
-                                                    Hathaway: Rio 2, Les Misérables). And there’s real urgency to their
-                                                    work, not merely daydreams of space, because they’ve discovered a
-                                                    wormhole out near Saturn that could hold the key to humanity’s
-                                                    salvation: a new planet to call home on the other side. It doesn’t
-                                                    take much for the Brands to convince Coop that a trip through the
-                                                    wormhole to scout for a habitable planet would satisfy both his
-                                                    thirst for adventure and his desire to save his children from the
-                                                    oncoming doom.<br><br>That is but the quickest outline of the
-                                                    beginning of a story for which the term epic barely suffices.
-                                                    Director <span id="director"><span id="director">Christopher</span>
-                                                        <span id="director">Nolan</span></span> (The Dark Knight Rises,
-                                                    Inception) — writing once again with his brother, Jonathan — could
-                                                    easily have expanded this to a ten-hour miniseries, there’s so much
-                                                    that could have been lingered over here. Yet <span
-                                                        id="movie">Interstellar</span>, at nearly three hours, certainly
-                                                    isn’t rushed, either; almost the opposite — this could be a
-                                                    slower-told story from Coop’s obviously slower world than ours
-                                                    today. <span id="director">Nolan</span> takes plenty of time for a
-                                                    sort of deep-space grandeur that was surely inspired by 2001: A
-                                                    Space Odyssey: the image of the tiny, tiny ship Coop and his small
-                                                    crew leave Earth in passing in front of the immensity of Saturn
-                                                    brought tears to my eyes with its juxtaposition of the might of
-                                                    nature and the audacity of humanity in the face of it. It isn’t at
-                                                    all unfair to see shades of 2001 in <span
-                                                        id="movie">Interstellar</span>, not when it concerns itself with
-                                                    both the most intimate of human emotions and desires — love and
-                                                    survival, loneliness and despair — and the biggest of ideas: the
-                                                    boldness of humans as a species, the future to which we might
-                                                    aspire, the daring it will take to make that future
-                                                    happen.<br><br>(This is no art film, though: the other movie I would
-                                                    bet money inspired <span id="movie">Interstellar</span>, at least
-                                                    partly, is the 1979 Disney space adventure The Black Hole. That
-                                                    movie blew my mind as a kid, and I bet it did <span
-                                                        id="director">Nolan</span>’s, too.)<br><br>This is a film as
-                                                    bold and audacious as the ideas and the adventure it embraces as
-                                                    humanity’s destiny, never dumbing down its science and never
-                                                    pretending that the clash between reason and emotion isn’t something
-                                                    that even brilliant scientists battle in themselves. The most
-                                                    humanist thing about what might be the most humanist SF film in ages
-                                                    is this: it knows that our future is in the hands of all us deeply
-                                                    flawed and deeply conflicted humans, but that there’s still plenty
-                                                    of reason to hope anyway. But we do actually have to try.
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                                    <div class="comment_container4">
-                                        <div class="comment_box" onclick="flipBox4()">
-                                            <div class="comment_front"
-                                                style="background-color:rgba(0, 0, 0, 0) ;height: 200px;">
-                                                <!-- 正面内容 -->
-                                                <p class="comment_title">评论四</p>
-                                                <p class="comment_time">时间: 31 Oct 2014</p>
-                                                <p class="comment_author">作者: MaryAnn Johanson</p>
-                                            </div>
-                                            <div class="comment_back"
-                                                style="background-color:rgba(0, 0, 0, 0) ;height: 200px;">
-                                                <!-- 背面内容 -->
-                                                <p style=" height: 200px;">
-                                                    As has always been his calling card, <span id="director"><span
-                                                            id="director">Christopher</span> <span
-                                                            id="director">Nolan</span></span> has an eye for grand,
-                                                    expansive, thought-provoking experiences wrapped up in cinema.
-                                                    Perhaps his aims are too ambitious at times, but you can never
-                                                    accuse him of making an everyday film. He always shoots for the moon
-                                                    (or better yet a wormhole) and so his projects are ultimately better
-                                                    than most, even if they miss the target a bit. The reason being,
-                                                    <span id="movie">Interstellar</span> is still full of enough
-                                                    questions and concepts to leave us thinking for a good long time
-                                                    after we leave the theater.<br><br>Although approximately 2 hours
-                                                    and 49 minutes, hardly anyone could call <span
-                                                        id="movie">Interstellar</span> too long, because it is more
-                                                    often than not engaging, as we try and decipher where <span
-                                                        id="director">Nolan</span> is going to take us next. His story
-                                                    starts on a world that is certainly earth but strangely dystopian
-                                                    compared to the planet that we know and love. Reminiscent of When
-                                                    Harry Met Sally or something, old folks speak of the way the world
-                                                    was when the dust first hit and the corn crops had to be burned. Not
-                                                    much explanation is given but it is what it is.<br><br>This is the
-                                                    climate that the engineer-turned-farmer Coop (Matthew McConaughey)
-                                                    has to raise his two kids after his wife passed away. They are good
-                                                    kids for the most part. <span id="character">Murph</span> blames a
-                                                    so-called “ghost” for accidents that happen around the house and her
-                                                    brother teases her some. But they hardly complain about this life
-                                                    they have they; just push forward.<br><br>However, their father has
-                                                    always been an explorer at heart, a pilot who never got to truly
-                                                    test the vast seas of space or spread out his wings fully. That
-                                                    changes when he and his daughter come across an old relic from the
-                                                    past. No, it’s not a monolith but something far more human. He
-                                                    somewhat reluctantly teams up with his old professor Brandt (Sir
-                                                    Michael Caine) and the professor’s daughter Amelia(Anne Hathaway) in
-                                                    a major undertaking.<br><br>They want Coop to pilot a mission to a
-                                                    wormhole which is just out of humanity’s reach. It was seemingly
-                                                    miraculously gifted to the human race by some unknown third person.
-                                                    This is their chance to A: find a new planet for a mass exodus or B:
-                                                    restart a colony on a far away destination. The first option is far
-                                                    less grim. Coop takes the mission in the hopes of saving his kids,
-                                                    but he knows the ramifications. Since time is all relative he does
-                                                    not know when he is coming back. He does not even know what he will
-                                                    find or if he will be successful. He heads off as an angry <span
-                                                        id="character">Murph</span> tearfully watches him fall out of
-                                                    her life.<br><br>In a match cut of his own, <span
-                                                        id="director">Nolan</span> transports Coop from his truck to the
-                                                    outer reaches of the galaxy. The real adventure has begun. The
-                                                    mission is clear. Save humanity from most certain extinction. It
-                                                    does not make it easier however that messages are constantly being
-                                                    relayed from earth. Coop and his three colleagues set up a plan of
-                                                    action. Their first target is a water covered environment that looks
-                                                    promising. Not so. Next, Coop overrules Brandt and they head to a
-                                                    desolate world that a previous explorer had labeled as inhabitable.
-                                                    To put it bluntly, he lied and he was not the only one.<br><br>Now
-                                                    <span id="character">Murph</span> is older (Jessica Chastain) and
-                                                    she still has a hard time reconciling the departure of her dad. In
-                                                    an especially impactful scene, a still ageless Coop watches
-                                                    tearfully as his older son’s life literally passes before his eyes
-                                                    through the video communications that have been relayed
-                                                    up.<br><br>Coop has no way to reply. He can only watch and push
-                                                    forward to try and find a solution. But the answers are few and far
-                                                    between as time continues to move rapidly faster on earth than with
-                                                    the crew of the Endurance. In one final act of selfless valor Coop
-                                                    heads into a black hole and thus begins his own mind-blowing leg of
-                                                    his space odyssey. Some connections are made and when all the pieces
-                                                    are put together all that really matters is his inextinguishable
-                                                    love and family. In the end, Coop spends a nice moment with his
-                                                    daughter under very different circumstances. Together they saved the
-                                                    human race. Together they survived.<br><br>For a film that was made
-                                                    for Physic nerds with talk of black holes, worm holes, relativity,
-                                                    quantum mechanics, Newton’s Third Law, gravity and the like, <span
-                                                        id="director">Nolan</span>’s conclusion has a universal ring. As
-                                                    Amelia Brand claims, “Love is the one thing that transcends time and
-                                                    space.” There are still scientific questions left to be debated for
-                                                    years to come, but we know that love is one thing that is forever
-                                                    true.<br><br>There are obviously numerous comparisons that can be
-                                                    made between <span id="movie">Interstellar</span> and 2001. I would
-                                                    rather focus on the differences very briefly. In <span
-                                                        id="director">Nolan</span>’s film, A.I. is actually useful and
-                                                    more reliable and kind than humanity itself. It is Man who lies,
-                                                    cheats and reverts to animalistic behavior all in the name of
-                                                    survival. <span id="movie">Interstellar</span> has a lot of
-                                                    scientific theory behind it (which I will acknowledge I do not know
-                                                    the ins and outs of), however, it also has a very human component.
-                                                    It is grounded on earth with Coop’s kids.<br><br>The visuals in
-                                                    <span id="movie">Interstellar</span> are often breathtaking but we
-                                                    would probably expect that for such an ambitious space saga. What I
-                                                    really took out of this film was the score and juxtaposition of
-                                                    sound. Hans Zimmer’s compositions were full of pounding organs that
-                                                    somehow fit the mood with their majestic and still austere sound.
-                                                    Furthermore, this film had a lot of dialogue and tense moments of
-                                                    noise, however, when we are outside the spacecraft it is almost
-                                                    completely silent reminding us of the reality of space. It is more
-                                                    often than not a vast, silent unknown.<br><br>I am reminded of when
-                                                    Coop explains to his daughter why she was named after <span
-                                                        id="character">Murph</span>y’s Law which seems to be bad. He
-                                                    replies that “<span id="character">Murph</span>y’s law doesn’t mean
-                                                    that something bad will happen. It means that whatever can happen,
-                                                    will happen.” And that was good enough for Coop and his late wife.
-                                                    In some ways I think these words can be used to describe <span
-                                                        id="movie">Interstellar</span>. With <span
-                                                        id="director">Nolan</span>, there is the potential that whatever
-                                                    can happen, will. There is excitement and magic in that, even if it
-                                                    sometimes overshoots its bounds. It’s not necessarily a bad thing
-                                                    and that’s good enough for me.<br><br>
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                                    <div class="comment_container5">
-                                        <div class="comment_box" onclick="flipBox5()">
-                                            <div class="comment_front"
-                                                style="background-color:rgba(0, 0, 0, 0) ;height: 200px;">
-                                                <!-- 正面内容 -->
-                                                <p class="comment_title">评论五</p>
-                                                <p class="comment_time">时间: 15 November 2014</p>
-                                                <p class="comment_author">作者: 4 Star Films</p>
-                                            </div>
-                                            <div class="comment_back"
-                                                style="background-color:rgba(0, 0, 0, 0) ;height: 200px;">
-                                                <!-- 背面内容 -->
-                                                <p style=" height: 200px;">My brain is going to have to work overtime to
-                                                    process all this information. Because I have a lot of questions. Is
-                                                    it possible that some things don't add up? Of course, big chunks
-                                                    were left to our imagination. That way it always adds up. You might
-                                                    not like the robots at first, but give them a chance. They are
-                                                    awesome.
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                                    <div class="comment_container6">
-                                        <div class="comment_box" onclick="flipBox6()">
-                                            <div class="comment_front"
-                                                style="background-color:rgba(0, 0, 0, 0) ;height: 200px;">
-                                                <!-- 正面内容 -->
-                                                <p class="comment_title">评论六</p>
-                                                <p class="comment_time">时间: 26 OCTOBER 2014</p>
-                                                <p class="comment_author">作者: Pvt. Cowboy</p>
-                                            </div>
-                                            <div class="comment_back"
-                                                style="background-color:rgba(0, 0, 0, 0) ;height: 200px;">
-                                                <!-- 背面内容 -->
-                                                <p style=" height: 200px;">The greatest advantage and the gravest
-                                                    disadvantage about a science-fiction film is that they are mostly
-                                                    based on a premise that defies common sense and may not even be
-                                                    possible. Much like Modern Physics and the theories of relativity
-                                                    that defy what we perceive as common sense. But it would be ignorant
-                                                    to say that they aren't true and it would be ignorant to say that
-                                                    <span id="movie">Interstellar</span> is complete
-                                                    fiction.<br><br><br>If I were to be completely frank, I would say
-                                                    <span id="movie">Interstellar</span> is pretty much another 2001: A
-                                                    Space Odyssey without the mind melting finale it gives. It is a
-                                                    captivating film with visual effects to kill for, a lot of which is
-                                                    shot in IMAX, capturing beautifully the horror of the cosmos. Much
-                                                    like 2001, it talks about man's place in the universe and makes a
-                                                    solid statement at that towards the climax. It tries to juxtapose
-                                                    emotional, scientific, rational and survival instincts, each of
-                                                    equal significance and asks the characters to choose between them.
-                                                    It looks like a pretty easy choice to the viewers but the film shows
-                                                    how reality is far more different.<br><br>At a rudimentary level,
-                                                    <span id="movie">Interstellar</span> is a lot of science but a lot
-                                                    more of fiction. It addresses paradoxes of time and space but leaves
-                                                    much to the 'magic' of a five dimensional world. So let's leave the
-                                                    science to the explanations of the films in documentaries and talk
-                                                    of it as just a film; and not just any film, n 'All Time Great'
-                                                    film.<br><br>Look at Matthew McConaughey, the male protagonist <span
-                                                        id="character">Cooper</span>, who pilots a spaceship carrying a
-                                                    crew to a different galaxy via a wormhole created by some 'higher
-                                                    beings' to search for a planet where the inhabitants of a dying
-                                                    earth can survive and flourish. McConaughey is one actor who takes
-                                                    his role seriously enough to give it his everything. Similar is
-                                                    <span id="character">Cooper</span>'s character and so they tune in
-                                                    nicely. Another notable performance comes from Michael Caine (but of
-                                                    course) who plays Professor Brand, a physicist trying to device a
-                                                    theory in order to make it possible for all the earth people to
-                                                    reach the new planet. Caine, undoubtedly, looks intelligent enough
-                                                    to pull this through. Anne Hathaway as <span
-                                                        id="character">Cooper</span>'s partner on the ship and Brand's
-                                                    daughter has been given less work than she can actually take. A
-                                                    particularly solid character is that of <span
-                                                        id="character">Cooper</span>'s daughter that brings the right
-                                                    amount of emotional mix into the story. All this coupled with time
-                                                    dilation and black holes makes for one hell of a movie to
-                                                    watch.<br><br>The best thing about <span
-                                                        id="movie">Interstellar</span> is that it is intelligent and
-                                                    silent at the same time. Of course when you incorporate actual
-                                                    science in a movie, you throw in some exposition then and now into
-                                                    the scenes but look at those serenic pauses that it provides you to
-                                                    let the reality of the havocs inside the ship sink into the quiet of
-                                                    the outer space. The movie even succeeds at finding reasonable
-                                                    importance to the melodrama it throws at some points which I
-                                                    initially hated but later pardoned; because the overall excitement
-                                                    and thrill of the movie is awesome enough to complete it without any
-                                                    higher morality or supernatural phenomenon or any brain frying
-                                                    ending.
-                                                </p>
-
-                                            </div>
-                                        </div>
-
-                                    </div>
-
+                                    {% endfor %}
                                 </div>
-
-
-
-
                             </div>
 
-                            <script>
-                                function flipBox1() {
-                                    var container = document.querySelector('.comment_container1');
-                                    container.classList.toggle('flipped');
-                                }
-
-                                function flipBox2() {
-                                    var container = document.querySelector('.comment_container2');
-                                    container.classList.toggle('flipped');
-                                }
-
-                                function flipBox3() {
-                                    var container = document.querySelector('.comment_container3');
-                                    container.classList.toggle('flipped');
-                                }
-                                function flipBox4() {
-                                    var container = document.querySelector('.comment_container4');
-                                    container.classList.toggle('flipped');
-                                }
-
-                                function flipBox5() {
-                                    var container = document.querySelector('.comment_container5');
-                                    container.classList.toggle('flipped');
-                                }
-
-                                function flipBox6() {
-                                    var container = document.querySelector('.comment_container6');
-                                    container.classList.toggle('flipped');
-                                }
-
-
-                            </script>
 
                             <style>
                                 #character {
@@ -3055,12 +2055,7 @@
                                     background-color: #7BC8D1;
                                 }
 
-                                .comment_container1,
-                                .comment_container2,
-                                .comment_container3,
-                                .comment_container4,
-                                .comment_container5,
-                                .comment_container6 {
+                                .comment_container {
                                     perspective: 1000px;
                                     position: relative;
                                 }
@@ -3078,24 +2073,17 @@
                                     /* background: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), url("your-background-image.jpg"); */
                                 }
 
-                                .comment_container1.flipped .comment_box,
-                                .comment_container2.flipped .comment_box,
-                                .comment_container3.flipped .comment_box,
-                                .comment_container4.flipped .comment_box,
-                                .comment_container5.flipped .comment_box,
-                                .comment_container6.flipped .comment_box {
+                                .comment_container.flipped .comment_box {
                                     transform: rotateY(180deg);
                                 }
 
                                 .comment_front,
                                 .comment_back {
-
                                     backface-visibility: hidden;
                                     transform-style: preserve-3d;
                                 }
 
                                 .comment_front {
-
                                     display: flex;
                                     align-items: center;
                                     justify-content: center;
@@ -3114,55 +2102,40 @@
                                     transform: rotateY(180deg);
                                 }
 
-
-
-                                .comment_title {
-                                    background-color: #7c58c3;
-                                    color: #fff;
+                                .comment_title,
+                                .comment_time,
+                                .comment_author {
                                     font-family: Arial, sans-serif;
                                     font-size: 14px;
-                                    font-weight: bold;
                                     border-radius: 8px;
                                     padding: 10px;
                                     line-height: 1.4;
-                                    margin-right: 15px;
                                     height: 30%;
                                     display: flex;
                                     align-items: center;
                                     justify-content: center;
+                                }
+
+                                .comment_title {
+                                    background-color: #7c58c3;
+                                    color: #fff;
+                                    font-weight: bold;
+                                    margin-right: 15px;
                                 }
 
                                 .comment_time {
                                     background-color: #43bcd4;
                                     color: #fff;
-                                    font-family: Arial, sans-serif;
-                                    font-size: 14px;
                                     font-weight: bold;
-                                    border-radius: 8px;
-                                    padding: 10px;
-                                    line-height: 1.4;
-                                    display: flex;
-                                    align-items: center;
-                                    justify-content: center;
-
-                                    height: 30%;
                                 }
 
                                 .comment_author {
                                     background-color: #e1437b;
                                     color: #fff;
-                                    font-family: Arial, sans-serif;
-                                    font-size: 14px;
-                                    border-radius: 8px;
-                                    padding: 10px;
-                                    line-height: 1.4;
-                                    height: 30%;
                                     margin-left: 15px;
-                                    display: flex;
-                                    align-items: center;
-                                    justify-content: center;
                                 }
                             </style>
+
 
 
 
