@@ -82,6 +82,7 @@ class Characters(models.Model):
     character_id = models.CharField(db_column='Character_id', primary_key=True, max_length=255)  # Field name made lowercase.
     character_name = models.CharField(db_column='Character_name', max_length=255, blank=True, null=True)  # Field name made lowercase.
     character_scene = models.CharField(db_column='Character_scene', max_length=512, blank=True, null=True)  # Field name made lowercase.
+    character_image = models.CharField(db_column='Character_image', max_length=255, blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
