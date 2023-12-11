@@ -1458,11 +1458,11 @@ style="margin-left:-25px;margin-top: -25px;background-color:  rgba(255, 255, 255
                                                    }
                                                 }
                                                 if (!nodes.some(node => node.id === source)) {
-                                                  nodes.push({ id: source, name: sourceCharacterName, image: "{% static 'images/roth.png' %}" });
+                                                  nodes.push({ id: source, name: sourceCharacterName, image: "{% static 'images/' %}"+ sourceCharacterName+".png"});
                                                 }
 
                                                 if (!nodes.some(node => node.id === target)) {
-                                                  nodes.push({ id: target, name: targetCharacterName, image: "{% static 'images/cooper.jpg' %}" });
+                                                  nodes.push({ id: target, name: targetCharacterName, image: "{% static 'images/' %}"+ targetCharacterName+".png"});
                                                 }
 
                                                 links.push({ source, target, relationship });
