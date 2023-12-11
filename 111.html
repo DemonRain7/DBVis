@@ -13,6 +13,8 @@
     #relationship-chart {
       width: 400px;
       height: 500px;
+      top: 50px;
+      left: 50px;
       background-color: #222;
       position: relative;
       overflow: hidden;
@@ -22,6 +24,7 @@
     .fullscreen #relationship-chart {
       width: 100vw;
       height: 100vh;
+
     }
 
     .link {
@@ -81,8 +84,6 @@
     const chartDiv = document.getElementById("relationship-chart");
     let isFullscreen = false;
 
-    chartDiv.style.width = '400px';
-    chartDiv.style.height = '500px';
 
     const toggleFullScreen = () => {
       isFullscreen = !isFullscreen;
@@ -90,15 +91,19 @@
       if (isFullscreen) {
         chartDiv.style.width = '100vw';
         chartDiv.style.height = '100vh';
-        document.documentElement.requestFullscreen().then(() => {
+        chartDiv.style.top = '0';
+        chartDiv.style.left = '0';
+
           initChartAfterFullScreen();
-        });
+
       } else {
         chartDiv.style.width = '400px';
         chartDiv.style.height = '500px';
-        document.exitFullscreen().then(() => {
+        chartDiv.style.top = '50px';
+        chartDiv.style.left = '50px';
+
           initChartAfterFullScreen();
-        });
+
       }
     };
 
