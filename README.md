@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # DBVis 使用手册
 原生环境为Pycharm Professional2023.2.3版本
 使用者点击此处即可启动服务：
