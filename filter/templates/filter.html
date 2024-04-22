@@ -1,0 +1,296 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IMDb-like Homepage</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- 引入 Font Awesome 图标库 -->
+  <style>
+    /* Reset styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #000; /* 设置整个页面背景为黑色 */
+      color: #fff; /* 设置文字颜色为白色 */
+    }
+
+    /* Navigation styles */
+    nav {
+      background-color: #1a1a1a; /* 设置导航栏背景为深灰色 */
+      padding: 0 6%; /* 调整左右内边距 */
+      text-align: center;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px; /* 放大导航栏文字 */
+      height: 50px; /* 调整导航栏高度 */
+
+    }
+
+    nav .logo {
+      color: #fff;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    nav .menu {
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+
+    nav .menu-title {
+      color: #fff;
+      margin-left: 30px;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    nav .menu-content {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background-color: #141b29;
+      min-width: 160px;
+      z-index: 1;
+    }
+
+    nav .menu:hover .menu-content {
+      display: block;
+    }
+
+    nav .menu-content a {
+      display: block;
+      padding: 10px;
+      color: #fff;
+      text-decoration: none;
+    }
+
+    nav .menu-content a:hover {
+      background-color: #333;
+    }
+
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      margin: 0 10px;
+      transition: color 0.3s; /* 添加过渡效果 */
+    }
+
+    nav a:hover {
+      color: #ffcc00; /* 修改鼠标悬停时的颜色 */
+    }
+
+    .search-box {
+      flex-grow: 1;
+      margin: 0 20px;
+      position: relative; /* 让图标定位相对于搜索框 */
+    }
+
+    .search-box input[type="text"] {
+      width: calc(100% - 60px); /* 考虑到图标宽度，减去图标的宽度 */
+      padding: 8px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    .search-icon {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .search-icon:hover {
+      color: #ffcc00; /* 修改鼠标悬停时的颜色 */
+    }
+
+    /* Main content styles */
+    .main-content {
+      margin-top: 30px; /* 添加内容上方的留白 */
+      padding: 0 6%; /* 左右各留出 6% 的空白 */
+      display: flex; /* 将 main-content 设置为 Flex 容器 */
+      justify-content: space-between; /* 均匀分布子元素 */
+      position: relative; /* 为了让绝对定位的子元素相对于其定位 */
+
+    }
+
+    /* Movie poster section styles */
+    .movie-poster {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 10vh; /* 添加内容下方的留白 */
+      margin-top: 3vh;
+      width: 65%; /* 设置海报的固定宽度 */
+      height: 70vh;
+      overflow: hidden; /* 隐藏可能溢出的内容 */
+
+    }
+
+
+    .movie-poster img {
+      width: 100%; /* 让图片宽度自适应父元素宽度 */
+      height: auto; /* 让图片高度自适应宽度 */
+    }
+
+    .thumbnail {
+      position: absolute;
+      padding-left: 5%; /* 控制缩略图相对于.movie-poster元素的左侧偏移量 */
+      bottom: 5%;
+      z-index: 1; /* 确保缩略图位于上层 */
+    }
+
+    .thumbnail img {
+      width: 38%; /* 设置缩略图的宽度 */
+      height: 30vh; /* 让高度自适应宽度 */
+    }
+
+    .movie-poster .movie-info {
+      color: #fff;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      padding: 10px;
+      background: linear-gradient(0deg, rgba(0, 0, 0, 1)50% , rgba(0, 0, 0, 0) );
+      width: 100%;
+      height: 30%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center; /* 垂直居中 */
+      padding-left: 30%; /* 调整文字板块的左内边距 */
+      padding-right: 15%;
+    }
+
+    .movie-poster .movie-info h2 {
+      font-size: 5vh;
+      margin-bottom: 5px;
+    }
+
+    .movie-poster .movie-info p {
+
+      font-size: 2vh;
+      margin: 0; /* 清除段落的默认边距 */
+    }
+    /* Ranking table container styles */
+    .ranking-table-container {
+      position: absolute;
+      margin-bottom: 10vh; /* 添加内容下方的留白 */
+      margin-top: 8vh;
+      right: calc(6% + 0px); /* 使用 calc() 函数计算右边距 */
+      width: 30%;
+      height:62vh;
+      background: linear-gradient(to right top, rgba(0, 0, 0, 1)30%, #1a1a1a); /* 设置背景为黑色到深灰色的渐变 */
+      padding: 20px;
+       border: 0.1vh solid #333; /* 添加边框 */
+    }
+    .title{
+      color: #ffd700; /* 设置文本颜色为金色 */
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* 添加文字阴影，使文字立体化 */
+    }
+    .tree{
+      position: absolute;
+      margin-bottom: 10vh; /* 添加内容下方的留白 */
+      margin-top: 8vh;
+      top: 70vh;
+      width: 88%;
+      height:67vh;
+      background: linear-gradient(to right top, rgba(0, 0, 0, 1)30%, #1a1a1a); /* 设置背景为黑色到深灰色的渐变 */
+      padding: 20px;
+       border: 0.1vh solid #333; /* 添加边框 */
+    }
+
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="../index" class="logo">MyMovieDB</a> <!-- 添加链接到商标 -->
+    <div class="menu">
+      <span class="menu-title"><i class="fas fa-bars"></i> Menu</span> <!-- 添加菜单图标 -->
+      <div class="menu-content">
+        <a href="#">Profile</a>
+        <a href="#">Settings</a>
+        <a href="#">Logout</a>
+      </div>
+    </div>
+    <div class="search-box">
+      <input type="text" placeholder="Search">
+      <i class="fas fa-search search-icon"></i> <!-- 使用 Font Awesome 的放大镜图标 -->
+    </div>
+    <a href="#">Home</a>
+    <a href="#">Movies</a>
+    <a href="#">TV Shows</a>
+    <a href="#">Top Rated</a>
+    <a href="#">Coming Soon</a>
+  </nav>
+
+  <!-- Main content -->
+  <div class="main-content">
+    <!-- Movie poster section -->
+    <div class="movie-poster">
+      <div class="thumbnail">
+        <img src="{% static 'images/music.jpg' %}" alt="Thumbnail">
+      </div>
+      <img src="{% static 'images/music1.jpg'%}" alt="Movie Poster">
+      <div class="movie-info">
+        <h2>Movie Title</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla fringilla velit non arcu gravida, sed tristique est aliquam.</p>
+      </div>
+    </div>
+
+
+
+    <div class="title" id="rank" style=" margin-bottom: 10vh; margin-top: 3vh;left: calc(64%); position: absolute;">
+        <h2>RANK</h2>
+    </div>
+
+
+
+    <div class="ranking-table-container">
+        <div class="rank">
+               <table>
+                <thead>
+                  <tr>
+                    <th>Rank</th>
+                    <th>Title</th>
+                    <th>Rating</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>The Shawshank Redemption</td>
+                    <td>9.3</td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>The Godfather</td>
+                    <td>9.2</td>
+                  </tr>
+                  <!-- Add more rows as needed -->
+                </tbody>
+              </table>
+        </div>
+
+    </div>
+
+    <div class="title" id="rank" style="   margin-bottom: 10vh; margin-top: 3vh;top: 70vh;position: absolute;">
+        <h2>Tree</h2>
+    </div>
+    <div class = "tree">
+
+    </div>
+  </div>
+
+</body>
+</html>

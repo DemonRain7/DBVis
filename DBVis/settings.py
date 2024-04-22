@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'index.apps.IndexConfig',
     'list.apps.ListConfig',
-    'work.apps.WorkConfig'
+    'work.apps.WorkConfig',
+    'filter.apps.FilterConfig'
 ]
 
 MIDDLEWARE = [
@@ -83,7 +84,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',  # Django的引擎，还可以用Oracle等
         'NAME': 'script_vis',  # 数据库名
         'USER': 'root',  # 用户名
-        'PASSWORD': 'qiuyu1220',  # 密码
+        'PASSWORD': '030315',  # 密码
         'HOST': '127.0.0.1',  # 数据库服务器地址
         'PORT': 3306,  # 端口号（MySQL默认3306）
     }

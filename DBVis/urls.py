@@ -20,10 +20,12 @@ from django.urls import path, include
 from index import views as indexview
 from list import views as listview
 from work import views as workview
+from filter import views as filterview
 
 urlpatterns = [
     path('index/', indexview.show_index),
     path('list/', listview.show_list),
+    path('filter/', filterview.show_filter),
     path('work/', include('work.urls', namespace='work')),
     path('testdb/',workview.testdb)
 ]
