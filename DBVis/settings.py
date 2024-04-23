@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'index.apps.IndexConfig',
     'list.apps.ListConfig',
     'work.apps.WorkConfig',
-    'filter.apps.FilterConfig'
+    'filter.apps.FilterConfig',
+    'script.apps.ScriptConfig'
 ]
 
 MIDDLEWARE = [

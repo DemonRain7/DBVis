@@ -21,11 +21,13 @@ from index import views as indexview
 from list import views as listview
 from work import views as workview
 from filter import views as filterview
+from script import views as scriptview
 
 urlpatterns = [
     path('index/', indexview.show_index),
     path('list/', listview.show_list),
     path('filter/', filterview.show_filter),
+    path('script/', scriptview.show_script),
     path('work/', include('work.urls', namespace='work')),
     path('testdb/',workview.testdb)
 ]

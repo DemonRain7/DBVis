@@ -1,0 +1,425 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IMDb-like Homepage</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- 引入 Font Awesome 图标库 -->
+  <style>
+    /* Reset styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #000; /* 设置整个页面背景为黑色 */
+      color: #fff; /* 设置文字颜色为白色 */
+    }
+
+    /* Navigation styles */
+    nav {
+      background-color: #1a1a1a; /* 设置导航栏背景为深灰色 */
+      padding: 0 10%; /* 调整左右内边距 */
+      text-align: center;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px; /* 放大导航栏文字 */
+      height: 50px; /* 调整导航栏高度 */
+
+    }
+
+    nav .logo {
+      color: #fff;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    nav .menu {
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+
+    nav .menu-title {
+      color: #fff;
+      margin-left: 30px;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    nav .menu-content {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background-color: #141b29;
+      min-width: 160px;
+      z-index: 1;
+    }
+
+    nav .menu:hover .menu-content {
+      display: block;
+    }
+
+    nav .menu-content a {
+      display: block;
+      padding: 10px;
+      color: #fff;
+      text-decoration: none;
+    }
+
+    nav .menu-content a:hover {
+      background-color: #333;
+    }
+
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      margin: 0 10px;
+      transition: color 0.3s; /* 添加过渡效果 */
+    }
+
+    nav a:hover {
+      color: #ffcc00; /* 修改鼠标悬停时的颜色 */
+    }
+
+    .search-box {
+      flex-grow: 1;
+      margin: 0 20px;
+      position: relative; /* 让图标定位相对于搜索框 */
+    }
+
+    .search-box input[type="text"] {
+      width: calc(100% - 60px); /* 考虑到图标宽度，减去图标的宽度 */
+      padding: 8px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    .search-icon {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .search-icon:hover {
+      color: #ffcc00; /* 修改鼠标悬停时的颜色 */
+    }
+
+    /* Main content styles */
+    .main-content {
+      margin-top: 1px; /* 添加内容上方的留白 */
+      padding: 0 10%; /* 左右各留出 6% 的空白 */
+      display: flex; /* 将 main-content 设置为 Flex 容器 */
+      justify-content: space-between; /* 均匀分布子元素 */
+      position: relative; /* 为了让绝对定位的子元素相对于其定位 */
+
+    }
+
+    /* Movie poster section styles */
+    .movie-poster {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 10vh; /* 添加内容下方的留白 */
+      margin-top: 1vh;
+      width: 40%; /* 设置海报的固定宽度 */
+      height: 40vh;
+      overflow: hidden; /* 隐藏可能溢出的内容 */
+
+    }
+
+
+    .movie-poster img {
+      width: 100%; /* 让图片宽度自适应父元素宽度 */
+      height: auto; /* 让图片高度自适应宽度 */
+    }
+
+
+    .movie-poster .movie-info {
+      color: #fff;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      background: linear-gradient(0deg, rgba(0, 0, 0, 1)10% , rgba(0, 0, 0, 0) );
+      width: 100%;
+      height: 25%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center; /* 垂直居中 */
+      padding-left: 1%; /* 调整文字板块的左内边距 */
+      padding-right: 1%;
+    }
+
+    .movie-poster .movie-info h2 {
+      font-size: 4vh;
+      margin-bottom: 0.5vh;
+    }
+
+    .movie-poster .movie-info p {
+
+      font-size: 1.5vh;
+      margin: 0; /* 清除段落的默认边距 */
+    }
+    .wordcloud{
+      position: absolute;
+      margin-bottom: 10vh; /* 添加内容下方的留白 */
+      margin-top: 1vh;
+      margin-left: 4.5vh;
+      left: calc(40% + 0px); /* 使用 calc() 函数计算右边距 */
+      width: 25%;
+      height:40vh;
+      background: rgba(0, 0, 0, 0);
+    }
+    .wordcloud i:hover {
+        color: gold;
+    }
+    .wordcloud i{
+        margin-left: -10vh;
+
+    }
+    .cast{
+      position: absolute;
+      margin-top: 1vh;
+      top: 40vh;
+      width: 50%;
+      height:15vh;
+      background: rgba(0,0,0,1);
+      display: flex;
+      flex-direction: row; /* 将演员水平排列 */
+      {#border: 2px solid #fff; /* 添加白色实线边框 */#}
+    }
+    .actor {
+       padding-top: 1.5vh;
+       text-align: center; /* 水平居中演员名字 */
+       margin: 0 5vh; /* 调整演员之间的间距 */
+
+    }
+
+    .actor img {
+      width: 10vh; /* 调整演员照片的宽度 */
+      height: 10vh; /* 调整演员照片的高度 */
+      border-radius: 50%; /* 将照片变成圆形 */
+    }
+
+    .actor p {
+      margin-top: 0.5vh; /* 调整演员名字与照片之间的间距 */
+      font-size: 1.5vh; /* 调整演员名字的字体大小 */
+      color: #fff; /* 设置演员名字的颜色 */
+    }
+    /* Ranking table container styles */
+    .introduce {
+      position: absolute;
+      margin-bottom: 10vh; /* 添加内容下方的留白 */
+      margin-top: 1vh;
+      right: calc(10% + 0px); /* 使用 calc() 函数计算右边距 */
+      width: 30%;
+      height:55vh;
+      background: linear-gradient(to right top, rgba(0, 0, 0, 1)30%, #1a1a1a); /* 设置背景为黑色到深灰色的渐变 */
+      {#border: 2px solid #fff; /* 添加白色实线边框 */#}
+
+    }
+    .thumbnail {
+      position: absolute;
+      left: 3vh;
+      top:0 ;
+      z-index: 1; /* 确保缩略图位于上层 */
+    }
+
+    .thumbnail img {
+      width: 40%; /* 设置缩略图的宽度 */
+      height: 25vh; /* 让高度自适应宽度 */
+    }
+    .introduce-divider {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80%; /* 设置分界线宽度 */
+      height: 0.1vh; /* 设置分界线高度 */
+      background-color: #fff; /* 设置分界线颜色 */
+    }
+    .movie-description {
+      position: absolute;
+      left: 40%;
+      top:3vh;
+      padding-left: 5%;
+      padding-right: 2%;
+      width: 100%;
+
+    }
+
+    .movie-description h3 {
+      font-size: 3vh; /* 电影标题的字体大小 */
+      margin-bottom: 5vh; /* 与下一个元素之间的垂直间距 */
+      color: gold;
+    }
+
+    .movie-description p {
+      font-size: 1.5vh; /* 段落文字的字体大小 */
+      margin-bottom: 1vh; /* 段落之间的垂直间距 */
+      color: rgba(204, 204, 204, 0.8); /* 文本颜色为浅灰色 */
+    }
+    .movie-abstract {
+      position: absolute;
+      left: 1vh;
+      top:50%;
+      padding-left: 5%;
+      padding-right: 2%;
+      padding-top: 5vh;
+      width: 100%;
+    }
+    .movie-abstract h3 {
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* 添加文本阴影 */
+      color: gold; /* 文本颜色为浅灰色 */
+      font-size: 3vh; /* 文本字体大小为 14 像素 */
+      margin-bottom: 3vh; /* 与下一个元素之间的垂直间距 */
+    }
+    .movie-abstract p{
+      color: rgba(204, 204, 204, 0.8); /* 文本颜色为浅灰色 */
+      font-size: 2vh; /* 文本字体大小为 14 像素 */
+      margin-bottom: 1vh; /* 与下一个元素之间的垂直间距 */
+    }
+    .title{
+      color: #ffd700; /* 设置文本颜色为金色 */
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* 添加文字阴影，使文字立体化 */
+    }
+    .table{
+      position: absolute;
+      margin-bottom: 10vh; /* 添加内容下方的留白 */
+      margin-top: 8vh;
+      top: 55vh;
+      width: 80%;
+      height:40vh;
+      background: linear-gradient(to right top, rgba(0, 0, 0, 1)30%, #1a1a1a); /* 设置背景为黑色到深灰色的渐变 */
+      padding: 20px;
+
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="../index" class="logo">MyMovieDB</a> <!-- 添加链接到商标 -->
+    <div class="menu">
+      <span class="menu-title"><i class="fas fa-bars"></i> Menu</span> <!-- 添加菜单图标 -->
+      <div class="menu-content">
+        <a href="#">Profile</a>
+        <a href="#">Settings</a>
+        <a href="#">Logout</a>
+      </div>
+    </div>
+    <div class="search-box">
+      <input type="text" placeholder="Search">
+      <i class="fas fa-search search-icon"></i> <!-- 使用 Font Awesome 的放大镜图标 -->
+    </div>
+    <a href="#">Home</a>
+    <a href="#">Movies</a>
+    <a href="#">TV Shows</a>
+    <a href="#">Top Rated</a>
+    <a href="#">Coming Soon</a>
+  </nav>
+
+  <!-- Main content -->
+  <div class="main-content">
+    <!-- Movie poster section -->
+    <div class="movie-poster">
+
+      <img src="{% static 'images/music1.jpg'%}" alt="Movie Poster">
+      <div class="movie-info">
+        <h2>Movie Title</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla fringilla velit non arcu gravida, sed tristique est aliquam.</p>
+      </div>
+    </div>
+    <div class="wordcloud" >
+      <i class="fas fa-font " style="color: gold;text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);font-size: 30vh;"></i>
+      <i id="star-icon" class="fas fa-star" style="font-size: 5vh; position: absolute; top: 1vh; left: 80%; cursor: pointer; color: gray; transition: color 0.3s;"></i>
+      <i id="heart-icon" class="fas fa-heart" style="font-size: 5vh; position: absolute; top: 30vh; left: 80%; cursor: pointer; color: gray; transition: color 0.3s;"></i>
+    </div>
+    <script>
+    // 获取图标元素
+    var starIcon = document.getElementById('star-icon');
+    var heartIcon = document.getElementById('heart-icon');
+
+    // 添加点击事件处理程序
+    starIcon.addEventListener('click', function() {
+        // 检查当前颜色
+        if (starIcon.style.color === 'gold') {
+            // 如果当前颜色是金色，则将其更改为灰色
+            starIcon.style.color = 'gray';
+        } else {
+            // 如果当前颜色是灰色，则将其更改为金色
+            starIcon.style.color = 'gold';
+        }
+    });
+
+    heartIcon.addEventListener('click', function() {
+        // 检查当前颜色
+        if (heartIcon.style.color === 'gold') {
+            // 如果当前颜色是金色，则将其更改为灰色
+            heartIcon.style.color = 'gray';
+        } else {
+            // 如果当前颜色是灰色，则将其更改为金色
+            heartIcon.style.color = 'gold';
+        }
+    });
+</script>
+    <div class="cast">
+        <div class="actor">
+            <img src="{% static 'images/brand.png' %}" alt="Actor 1">
+            <p>Brand</p>
+        </div>
+        <div class="actor">
+            <img src="{% static 'images/cooper.jpg' %}" alt="Actor 2">
+            <p>Cooper</p>
+        </div>
+        <div class="actor">
+            <img src="{% static 'images/case.png' %}" alt="Actor 2">
+            <p>Case</p>
+        </div>
+        <div class="actor">
+            <img src="{% static 'images/roth.png' %}" alt="Actor 2">
+            <p>Roth</p>
+        </div>
+    </div>
+
+
+    <div class="introduce">
+          <div class="thumbnail">
+              <img src="{% static 'images/music.jpg' %}" alt="Thumbnail">
+          </div>
+          <div class="movie-description">
+            <h3>| Movie Title</h3>
+            <p><strong>Release Date:</strong> January 1, 2024</p>
+            <p><strong>Director:</strong> Director Name</p>
+            <p><strong>Cast:</strong> Actor 1, Actor 2, Actor 3</p>
+            <p><strong>Genres:</strong> Genre 1, Genre 2, Genre 3</p>
+          </div>
+          <div class="introduce-divider"></div>
+          <div class="movie-abstract">
+               <h3>| Movie Abstract</h3>
+               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla fringilla velit non arcu gravida, sed tristique est aliquam. Integer nec metus eu dui feugiat vulputate. Mauris vel nisi a leo vehicula pharetra. Vivamus consectetur magna nec aliquam fermentum. Aliquam non convallis lorem.</p>
+
+          </div>
+
+
+    </div>
+
+    <div class="title" id="table" style="   margin-bottom: 10vh; margin-top: 3vh;top: 55vh;position: absolute;">
+        <h2>| Table</h2>
+    </div>
+    <div class = "table">
+
+    </div>
+  </div>
+
+</body>
+</html>
