@@ -1,16 +1,16 @@
-# DBVis 使用手册
-原生环境为Pycharm Professional2023.2.3版本
-1、使用者点击此处即可启动服务：
+# DBVis User Manual
+The native environment is PyCharm Professional version 2023.2.3.
+1、Users can click here to start the service:
 ![img.png](readme_img/img.png)
 
-2、而后，会在运行界面弹出提示，点击标蓝部分即可访问我们网站：
+2、A prompt will appear in the running interface; click the highlighted part to access our website:
 ![img_1.png](readme_img/img_1.png)
 
-3、而后会弹出浏览器，这是正常情况：
+3、A browser will pop up, which is normal:
 ![img_2.png](readme_img/img_2.png)
 
-4、此时，再在输入框内输入/index，即如下图形式，即可访问网站主页：
+4、At this point, enter /index in the input box, as shown in the figure below, to access the homepage:
 ![img_3.png](readme_img/img_3.png)
 
-5、输入后，我们网站主页显现出来：
+5、After entering, our website's homepage will be displayed:
 ![img_4.png](readme_img/img_4.png)
